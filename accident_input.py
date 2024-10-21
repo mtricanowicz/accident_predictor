@@ -12,7 +12,7 @@ lat_start = 35.22862041030688
 lat_start = -80.83445778852331
 
 # Create a map centered on some initial location (e.g., San Francisco)
-m = folium.Map(location=[lat_start, lat_start], zoom_start=10)
+m = folium.Map(location=[lat_start, lon_start], zoom_start=10)
 
 # Add a click event to the map to capture user-selected point
 m.add_child(folium.LatLngPopup())
@@ -55,7 +55,7 @@ if map_output['last_clicked'] is not None:
     LON = map_output['last_clicked']['lng']  # selected location longitude
 else:
     LAT = lat_start
-    LON = lat_start
+    LON = lon_start
 # Define the API call
 url = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={API_KEY}"
 
