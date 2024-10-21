@@ -44,7 +44,7 @@ API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323"
 LAT, LON = lat, lon  # location from map click
 
 def get_weather(lat, lon, api_key):
-    url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
+    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
     response = requests.get(url)
     return response.json()
 
