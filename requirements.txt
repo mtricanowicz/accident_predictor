@@ -5,5 +5,5 @@ numpy
 math
 folium
 streamlit_folium
-geopy.geocoders
+geopy
 Nominatim
