@@ -90,10 +90,13 @@ else:
     st.write("Click on the map to select a point.")
 
 # Prompt user to specify whether or not a traffic signal is nearby
-user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
+user_response = st.radio("Is there a traffic signal nearby?", (True, False))
 # Store the response in a variable
 if user_response:
     traffic_signal = user_response
+else:
+    traffic signal = True
+
 '''
 # Ensure timestamp variable is stored as a datetime data type
 timestamp = pd.to_datetime(timestamp, format='ISO8601')
