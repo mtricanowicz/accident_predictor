@@ -22,6 +22,7 @@ m = folium.Map(location=[lat_start, lon_start], zoom_start=20)
 
 # Add a click event to the map to capture user-selected point
 m.add_child(folium.LatLngPopup())
+timestamp = datetime.now()
 
 # Display the map in Streamlit and capture the click event
 map_output = st_folium(m, width=900, height=600)
@@ -47,6 +48,9 @@ def get_weather_data(lat, lon, api_key):
 if map_output['last_clicked'] is not None:
     lat = map_output['last_clicked']['lat']
     lon = map_output['last_clicked']['lng']
+
+    # Display time of click
+    st.write(timestamp)
 
     # Display the selected latitude and longitude
     st.write(f"Selected Latitude: {lat}")
