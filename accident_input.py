@@ -33,7 +33,7 @@ def reverse_geocode(lat, lon):
     geolocator = Nominatim(user_agent="accident_input")
     location = geolocator.reverse((lat, lon), exactly_one=True)
     if location:
-        return location.address
+        return location.raw['address']
     return "Address not found"
 
 # Function to fetch weather data from OpenWeatherMap
