@@ -9,7 +9,7 @@ st.title("Select a Point on the Map")
 
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
-lat_start = -80.83445778852331
+lon_start = -80.83445778852331
 
 # Create a map centered on some initial location (e.g., San Francisco)
 m = folium.Map(location=[lat_start, lon_start], zoom_start=10)
