@@ -4,11 +4,11 @@ import folium
 from geopy.geocoders import Nominatim
 import requests
 
-# Initialize the Streamlit app
+# Initialize the Streamlit app with a selectable map
 st.title("Select a Point on the Map")
 
 # Create a map centered on some initial location (e.g., San Francisco)
-m = folium.Map(location=[37.7749, -122.4194], zoom_start=10)
+m = folium.Map(location=[35.22862041030688, -80.83445778852331], zoom_start=10)
 
 # Add a click event to the map to capture user-selected point
 m.add_child(folium.LatLngPopup())
@@ -39,16 +39,19 @@ if map_output['last_clicked'] is not None:
 else:
     st.write("Click on the map to select a point.")
 
+# Pull weather information for the selected location
+st.title("Weather at Selected Location")
 
-API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323"
-LAT = map_output['last_clicked']['lat']
-LON = map_output['last_clicked']['lng']  # location from map click
+# Define the openweathermaps.org API components
+API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
+#LAT = map_output['last_clicked']['lat'] # selected location lattitude
+#LON = map_output['last_clicked']['lng']  # selected location longitude
 
 def get_weather(lat, lon, api_key):
     url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
     response = requests.get(url)
     return response.json()
 
-weather_data = get_weather(LAT, LON, API_KEY)
+weather_data = get_weather(lat, lon, API_KEY)
 print(weather_data)
 
