@@ -26,7 +26,7 @@ m.add_child(folium.LatLngPopup())
 timestamp = datetime.now()
 
 # Display the map in Streamlit and capture the click event
-map_output = st_folium(m, height=1600, width=900)
+map_output = st_folium(m, width=1000, height=700)
 
 # Function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
