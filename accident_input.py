@@ -95,7 +95,7 @@ user_response = st.radio("Is there a traffic signal nearby?", (True, False))
 if user_response:
     traffic_signal = user_response
 else:
-    traffic signal = True
+    traffic_signal = True
 
 '''
 # Ensure timestamp variable is stored as a datetime data type
