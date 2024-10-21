@@ -45,6 +45,11 @@ def get_weather_data(lat, lon, api_key):
     else:
         return None
 
+# Instantiate the location to the starting point
+lat = lat_start
+lon = lon_start
+zipcode = reverse_geocode(lat, lon).get('postcode')
+
 # Check if the user clicked on the map and retrieve the coordinates
 if map_output['last_clicked'] is not None:
     lat = map_output['last_clicked']['lat']
