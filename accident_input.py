@@ -4,6 +4,7 @@ import folium
 from geopy.geocoders import Nominatim
 import requests
 from datetime import datetime
+import numpy as np
 
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
@@ -69,8 +70,8 @@ if map_output['last_clicked'] is not None:
         # Display weather information
         st.write(f"Temperature: {temp} °F")
         st.write(f"Wind Chill: {temp} °F")
-        st.write(f"Pressure: {pressure} inHg")
-        st.write(f"Visibility: {visibility} miles")
+        st.write(f"Pressure: {np.round(pressure, 2)} inHg")
+        st.write(f"Visibility: {np.round(visibility, 2)} miles")
         st.write(f"Humidity: {humidity} %")
         st.write(f"Wind Speed: {wind_speed} mph")        
     else:
