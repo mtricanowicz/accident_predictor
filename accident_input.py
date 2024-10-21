@@ -94,7 +94,7 @@ user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
 # Store the response in a variable
 if user_response=="Yes":
     traffic_signal = True
-else if user_response=="No":
+elif user_response=="No":
     traffic_signal = False
 else:
     traffic_signal = True
