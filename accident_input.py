@@ -62,16 +62,16 @@ if map_output['last_clicked'] is not None:
         # Define weather information
         temp = weather_data['main']['temp']
         wind_chill = weather_data['main']['feels_like']
-        pressure = weather_data['main']['pressure']
-        visibility = weather_data['visibility']
+        pressure = weather_data['main']['pressure'] * 0.2953 # convert API data from hPA to inHg
+        visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
         humidity = weather_data['main']['humidity']
         wind_speed = weather_data['wind']['speed']
         # Display weather information
         st.write(f"Temperature: {temp} °F")
         st.write(f"Wind Chill: {temp} °F")
-        st.write(f"Pressure: {pressure} hPa")
-        st.write(f"Visibility: {visibility} m")
-        st.write(f"Humidity: {humidity}%")
+        st.write(f"Pressure: {pressure} inHg")
+        st.write(f"Visibility: {visibility} miles")
+        st.write(f"Humidity: {humidity} %")
         st.write(f"Wind Speed: {wind_speed} mph")        
     else:
         st.write("Weather data could not be retrieved.")
