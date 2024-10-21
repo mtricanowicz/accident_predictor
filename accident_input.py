@@ -18,7 +18,7 @@ map_output = st_folium(m, width=700, height=500)
 
 # Function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
-    geolocator = Nominatim(user_agent="streamlit-app")
+    geolocator = Nominatim(user_agent="accident_input")
     location = geolocator.reverse((lat, lon), exactly_one=True)
     if location:
         return location.address
@@ -26,22 +26,22 @@ def reverse_geocode(lat, lon):
 
 # Check if the user clicked on the map and retrieve the coordinates
 if map_output['last_clicked'] is not None:
-    lat_click = map_output['last_clicked']['lat']
-    lon_click = map_output['last_clicked']['lng']
+    lat = map_output['last_clicked']['lat']
+    lon = map_output['last_clicked']['lng']
 
     # Display the selected latitude and longitude
-    st.write(f"Selected Latitude: {lat_click}")
-    st.write(f"Selected Longitude: {lon_click}")
+    st.write(f"Selected Latitude: {lat}")
+    st.write(f"Selected Longitude: {lon}")
 
     # Reverse geocode the selected lat/lng to get address details
-    address = reverse_geocode(lat_click, lon_click)
+    address = reverse_geocode(lat, lon)
     st.write(f"Address: {address}")
 else:
     st.write("Click on the map to select a point.")
 
 
 API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323"
-LAT, LON = lat_click, lon_click  # Example location (San Francisco)
+LAT, LON = lat, lon  # location from map click
 
 def get_weather(lat, lon, api_key):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
