@@ -95,6 +95,9 @@ user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
 if user_response:
     traffic_signal = user_response
 
+# Ensure timestamp variable is stored as a datetime data type
+timestamp = pd.to_datetime(timestamp, format='ISO8601')
+
 # Store accident conditions in a DataFrame
 columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
 inputs = [timestamp.dt.year, timestamp.dt.month, timestamp.dt.day, timestamp.dt.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal] 
