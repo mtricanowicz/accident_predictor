@@ -45,10 +45,18 @@ def get_weather_data(lat, lon, api_key):
     else:
         return None
 
-# Instantiate the location to the starting point
+# Instantiate the location to the default starting location
 lat = lat_start
 lon = lon_start
 zipcode = reverse_geocode(lat, lon).get('postcode')
+# Retrieve the weather information for the default starting location
+weather_data = get_weather_data(lat, lon, API_KEY)
+temp = weather_data['main']['temp']
+wind_chill = weather_data['main']['feels_like']
+pressure = weather_data['main']['pressure'] * 0.2953 # convert API data from hPA to inHg
+visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
+humidity = weather_data['main']['humidity']
+wind_speed = weather_data['wind']['speed']
 
 # Check if the user clicked on the map and retrieve the coordinates
 if map_output['last_clicked'] is not None:
@@ -104,10 +112,6 @@ elif user_response=="No":
 else:
     traffic_signal = True
 
-'''
-# Ensure timestamp variable is stored as a datetime data type
-timestamp = pd.to_datetime(timestamp, format='ISO8601')
-'''
 # Store accident conditions in a DataFrame
 columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
 inputs = [[timestamp.year, timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
