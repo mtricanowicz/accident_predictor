@@ -39,6 +39,10 @@ if map_output['last_clicked'] is not None:
 else:
     st.write("Click on the map to select a point.")
 
+
+st.write(lat)
+st.write(lon)
+
 # Pull weather information for the selected location
 st.title("Weather at Selected Location")
 
