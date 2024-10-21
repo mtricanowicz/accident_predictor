@@ -103,6 +103,6 @@ timestamp = pd.to_datetime(timestamp, format='ISO8601')
 '''
 # Store accident conditions in a DataFrame
 columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
-inputs = [timestamp.year, timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal] 
+inputs = [[timestamp.year, timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
 accident_input = pd.DataFrame(inputs, columns=columns)
 st.write(accident_input)
