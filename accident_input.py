@@ -5,6 +5,7 @@ from geopy.geocoders import Nominatim
 import requests
 from datetime import datetime
 import numpy as np
+import pandas as pd
 
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
@@ -58,6 +59,7 @@ if map_output['last_clicked'] is not None:
 
     # Reverse geocode the selected lat/lng to get address details
     address = reverse_geocode(lat, lon)
+    zipcode = address.get('postcode')
     st.write(f"Address: {address}")
 
     # Fetch weather data based on the selected location
@@ -73,7 +75,7 @@ if map_output['last_clicked'] is not None:
         wind_speed = weather_data['wind']['speed']
         # Display weather information
         st.write(f"Temperature: {temp} °F")
-        st.write(f"Wind Chill: {temp} °F")
+        st.write(f"Wind Chill: {wind_chill} °F")
         st.write(f"Pressure: {np.round(pressure, 2)} inHg")
         st.write(f"Visibility: {np.round(visibility, 2)} miles")
         st.write(f"Humidity: {humidity} %")
@@ -82,3 +84,15 @@ if map_output['last_clicked'] is not None:
         st.write("Weather data could not be retrieved.")
 else:
     st.write("Click on the map to select a point.")
+
+# Prompt user to specify whether or not a traffic signal is nearby
+user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
+# Store the response in a variable
+if user_response:
+    traffic_signal = user_response
+
+# Store accident conditions in a DataFrame
+columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
+inputs = [timestamp.dt.year, timestamp.dt.month, timestamp.dt.day, timestamp.dt.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal] 
+accident_input = pd.DataFrame(inputs, columns=columns)
+st.write(accident_input)
