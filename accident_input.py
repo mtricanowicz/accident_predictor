@@ -3,6 +3,7 @@ from streamlit_folium import st_folium
 import folium
 from geopy.geocoders import Nominatim
 import requests
+from datetime import datetime
 
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
@@ -58,19 +59,20 @@ if map_output['last_clicked'] is not None:
     weather_data = get_weather_data(lat, lon, API_KEY)
 
     if weather_data:
-        st.write(weather_data)
-        '''
-        # Display some basic weather information
+        # Define weather information
         temp = weather_data['main']['temp']
-        weather_desc = weather_data['weather'][0]['description']
+        wind_chill = weather_data['main']['feels_like']
+        pressure = weather_data['main']['pressure']
+        visibility = weather_data['visibility']
         humidity = weather_data['main']['humidity']
         wind_speed = weather_data['wind']['speed']
-
-        st.write(f"Weather: {weather_desc.capitalize()}")
-        st.write(f"Temperature: {temp} °C")
+        # Display weather information
+        st.write(f"Temperature: {temp} °F")
+        st.write(f"Wind Chill: {temp} °F")
+        st.write(f"Pressure: {pressure} hPa")
+        st.write(f"Visibility: {visibility} m")
         st.write(f"Humidity: {humidity}%")
-        st.write(f"Wind Speed: {wind_speed} m/s")
-        '''
+        st.write(f"Wind Speed: {wind_speed} mph")        
     else:
         st.write("Weather data could not be retrieved.")
 else:
