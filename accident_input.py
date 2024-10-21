@@ -58,6 +58,8 @@ if map_output['last_clicked'] is not None:
     weather_data = get_weather_data(lat, lon, API_KEY)
 
     if weather_data:
+        st.write(weather_data)
+        '''
         # Display some basic weather information
         temp = weather_data['main']['temp']
         weather_desc = weather_data['weather'][0]['description']
@@ -68,6 +70,7 @@ if map_output['last_clicked'] is not None:
         st.write(f"Temperature: {temp} °C")
         st.write(f"Humidity: {humidity}%")
         st.write(f"Wind Speed: {wind_speed} m/s")
+        '''
     else:
         st.write("Weather data could not be retrieved.")
 else:
