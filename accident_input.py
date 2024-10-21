@@ -63,7 +63,7 @@ if map_output['last_clicked'] is not None:
     city = reverse_geocode(lat, lon).get('city')
     state = reverse_geocode(lat, lon).get('state')
     zipcode = reverse_geocode(lat, lon).get('postcode')
-    adress = f"{house_number} {street}, {city}, {state} {zipcode}"
+    address = f"{house_number} {street}, {city}, {state} {zipcode}"
     st.write(f"Address: {address}")
 
     # Fetch weather data based on the selected location
