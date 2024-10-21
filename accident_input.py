@@ -56,12 +56,10 @@ if map_output['last_clicked'] is not None:
 else:
     LAT = lat_start
     LON = lat_start
+# Define the API call
+url = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LON}&appid={API_KEY}"
 
-def get_weather(lat, lon, api_key):
-    url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
-    response = requests.get(url)
-    return response.json()
-
-weather_data = get_weather(lat, lon, API_KEY)
+# Retrieve and display weather data
+weather_data = requests.get(url).json()
 print(weather_data)
 
