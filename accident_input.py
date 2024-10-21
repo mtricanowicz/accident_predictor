@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_folium import st_folium
 import folium
 from geopy.geocoders import Nominatim
+import requests
 
 # Initialize the Streamlit app
 st.title("Select a Point on the Map")
@@ -25,15 +26,28 @@ def reverse_geocode(lat, lon):
 
 # Check if the user clicked on the map and retrieve the coordinates
 if map_output['last_clicked'] is not None:
-    lat = map_output['last_clicked']['lat']
-    lon = map_output['last_clicked']['lng']
+    lat_click = map_output['last_clicked']['lat']
+    lon_click = map_output['last_clicked']['lng']
 
     # Display the selected latitude and longitude
-    st.write(f"Selected Latitude: {lat}")
-    st.write(f"Selected Longitude: {lon}")
+    st.write(f"Selected Latitude: {lat_click}")
+    st.write(f"Selected Longitude: {lon_click}")
 
     # Reverse geocode the selected lat/lng to get address details
-    address = reverse_geocode(lat, lon)
+    address = reverse_geocode(lat_click, lon_click)
     st.write(f"Address: {address}")
 else:
     st.write("Click on the map to select a point.")
+
+
+API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323"
+LAT, LON = lat_click, lon_click  # Example location (San Francisco)
+
+def get_weather(lat, lon, api_key):
+    url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
+    response = requests.get(url)
+    return response.json()
+
+weather_data = get_weather(LAT, LON, API_KEY)
+print(weather_data)
+
