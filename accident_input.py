@@ -59,7 +59,6 @@ if map_output['last_clicked'] is not None:
 
     # Reverse geocode the selected lat/lng to get address details
     address = reverse_geocode(lat, lon)
-    zipcode = address.get('postcode')
     st.write(f"Address: {address}")
 
     # Fetch weather data based on the selected location
@@ -90,6 +89,9 @@ user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
 # Store the response in a variable
 if user_response:
     traffic_signal = user_response
+
+# Extract the zipcode from the address data
+zipcode = address.get('postcode')
 
 # Store accident conditions in a DataFrame
 columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
