@@ -16,7 +16,7 @@ lon_start = -80.83445778852331
 API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
 
 # Initialize the Streamlit app with a selectable map
-st.title("Select a Point on the Map")
+st.title("Identify accident location by selecting a point on the map.")
 
 # Create a map centered on some initial location (e.g., San Francisco)
 m = folium.Map(location=[lat_start, lon_start], zoom_start=20)
