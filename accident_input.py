@@ -107,6 +107,7 @@ else:
     st.write("Click on the map to select a point.")
 
 # Prompt user to specify whether or not a traffic signal is nearby
+st.title("Is there a traffic signal nearby?")
 user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
 # Store the response in a variable
 if user_response=="Yes":
