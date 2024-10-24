@@ -133,12 +133,22 @@ st.title("Test load model.")
 try:
     model = joblib.load('applet_model.pkl')
     st.write("Model loaded successfully.")
-except Exception as e:
-    st.write("Error loading model:", e)
+except Exception as e1:
+    st.write("Error loading model:", e1)
 
-
-# Call the prediction function
-#prediction = severity_predictor(user_input)
-#st.write("Accident traffic impact severity:")
-#st.write(prediction)
+# Test loading the model
+st.title("Attempt to generate prediction.")
+# Define the model
+model = joblib.load("applet_model.pkl")
+# Define callable prediction function to invoke the model on input data
+def severity_predictor(input):
+    # Generate prediction    
+    prediction = model.predict(input)
+    return prediction
+try:
+    prediction = severity_predictor(user_input)
+    st.write("Accident traffic impact severity:")
+    st.write(prediction)
+except Exception as e2:
+    st.write("Error loading model:", e2)
 
