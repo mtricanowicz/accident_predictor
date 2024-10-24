@@ -132,9 +132,9 @@ st.write(user_input )
 st.title("Test load model.")
 try:
     model = joblib.load('applet_model.pkl')
-    print("Model loaded successfully.")
+    st.write("Model loaded successfully.")
 except Exception as e:
-    print("Error loading model:", e)
+    st.write("Error loading model:", e)
 
 
 # Call the prediction function
