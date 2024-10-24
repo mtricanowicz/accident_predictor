@@ -65,7 +65,7 @@ if map_output['last_clicked'] is not None:
     lon = map_output['last_clicked']['lng']
 
     # Display time of click
-    st.write(timestamp)
+    st.write(f"Accident Time: {timestamp}")
 
     # Display the selected latitude and longitude
     st.write(f"Selected Latitude: {lat}")
@@ -114,8 +114,8 @@ else:
     traffic_signal = True
 
 # Store accident conditions in a DataFrame
-columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal_True"]
-inputs = [[timestamp.year, timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal_true]]
+columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
+inputs = [[timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal_true]]
 user_input = pd.DataFrame(inputs, columns=columns)
 # Import the optimized model features                                   
 model_features = pd.read_csv("model_features.csv").drop(columns="Unnamed: 0", errors="ignore").drop(13)
