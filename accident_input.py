@@ -118,6 +118,7 @@ else:
     traffic_signal = True
 
 # Store accident conditions in a DataFrame
+st.title("Input data for prediction model.")
 columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
 inputs = [[timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
 user_input = pd.DataFrame(inputs, columns=columns)
@@ -128,15 +129,16 @@ user_input = user_input[model_features["Feature"].values]
 st.write(user_input )
 
 # Test loading the model
+st.title("Test load model.")
 try:
     model = joblib.load('applet_model.pkl')
     print("Model loaded successfully.")
 except Exception as e:
     print("Error loading model:", e)
 
-'''
+
 # Call the prediction function
-prediction = severity_predictor(user_input)
-st.write("Accident traffic impact severity:")
-st.write(prediction)
-'''
+#prediction = severity_predictor(user_input)
+#st.write("Accident traffic impact severity:")
+#st.write(prediction)
+
