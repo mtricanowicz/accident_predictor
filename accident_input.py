@@ -6,7 +6,7 @@ import requests
 from datetime import datetime
 import numpy as np
 import pandas as pd
-from model import severity_predictor
+import joblib
 
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
@@ -113,19 +113,26 @@ elif user_response=="No":
 else:
     traffic_signal = True
 
-# Convert traffic_signal variable to a dummy variable
-if traffic_signal==True:
-    traffic_signal_true = 1
-else:
-    traffic_signal_true = 0
-
 # Store accident conditions in a DataFrame
 columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal_True"]
 inputs = [[timestamp.year, timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal_true]]
-accident_input = pd.DataFrame(inputs, columns=columns)
+user_input = pd.DataFrame(inputs, columns=columns)
+# Import the optimized model features                                   
+model_features = pd.read_csv("model_features.csv").drop(columns="Unnamed: 0", errors="ignore").drop(13)
+# Reorder the input features to match what the model expects to see     
+user_input = user_input[model_features["Feature"].values] 
 st.write(accident_input)
 
+# Test loading the model
+try:
+    model = joblib.load('applet_model.pkl')
+    print("Model loaded successfully.")
+except Exception as e:
+    print("Error loading model:", e)
+
+'''
 # Call the prediction function
-prediction = severity_predictor(accident_input)
+prediction = severity_predictor(user_input)
 st.write("Accident traffic impact severity:")
 st.write(prediction)
+'''
