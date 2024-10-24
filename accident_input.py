@@ -6,7 +6,10 @@ import requests
 from datetime import datetime
 import numpy as np
 import pandas as pd
-from model import severity_predictor
+import pickle
+
+# Set Streamlit layout
+st.set_page_config(layout="wide")
 
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
@@ -20,14 +23,14 @@ API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
 st.title("Identify accident location by selecting a point on the map.")
 
 # Create a map centered on some initial location (e.g., San Francisco)
-m = folium.Map(location=[lat_start, lon_start], zoom_start=20)
+m = folium.Map(location=[lat_start, lon_start], zoom_start=15)
 
 # Add a click event to the map to capture user-selected point
 m.add_child(folium.LatLngPopup())
 timestamp = datetime.now()
 
 # Display the map in Streamlit and capture the click event
-map_output = st_folium(m, width=1000, height=700)
+map_output = st_folium(m, width=1200, height=800)
 
 # Function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
@@ -65,7 +68,7 @@ if map_output['last_clicked'] is not None:
     lon = map_output['last_clicked']['lng']
 
     # Display time of click
-    st.write(timestamp)
+    st.write(f"Accident Time: {timestamp}")
 
     # Display the selected latitude and longitude
     st.write(f"Selected Latitude: {lat}")
@@ -104,6 +107,7 @@ else:
     st.write("Click on the map to select a point.")
 
 # Prompt user to specify whether or not a traffic signal is nearby
+st.title("Is there a traffic signal nearby?")
 user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
 # Store the response in a variable
 if user_response=="Yes":
@@ -113,19 +117,40 @@ elif user_response=="No":
 else:
     traffic_signal = True
 
-# Convert traffic_signal variable to a dummy variable
-if traffic_signal==True:
-    traffic_signal_true = 1
-else:
-    traffic_signal_true = 0
-
 # Store accident conditions in a DataFrame
-columns = ["Start_Year", "Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal_True"]
-inputs = [[timestamp.year, timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal_true]]
-accident_input = pd.DataFrame(inputs, columns=columns)
-st.write(accident_input)
+st.title("Input data for prediction model.")
+columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
+inputs = [[timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
+user_input = pd.DataFrame(inputs, columns=columns)
+# Import the optimized model features                                   
+model_features = pd.read_csv("model_features.csv").drop(columns="Unnamed: 0", errors="ignore").drop(13)
+# Reorder the input features to match what the model expects to see     
+user_input = user_input[model_features["Feature"].values] 
+st.write(user_input )
 
-# Call the prediction function
-prediction = severity_predictor(accident_input)
-st.write("Accident traffic impact severity:")
-st.write(prediction)
+# Test loading the model
+st.title("Test load model.")
+try:
+    with open('applet_model.pkl', 'rb') as file:
+            model = pickle.load(file)
+    st.write("Model loaded successfully.")
+except Exception as e1:
+    st.write("Error loading model:", e1)
+
+# Test loading the model
+st.title("Attempt to generate prediction.")
+# Define the model
+with open('applet_model.pkl', 'rb') as file:
+            model = pickle.load(file)
+# Define callable prediction function to invoke the model on input data
+def severity_predictor(input):
+    # Generate prediction    
+    prediction = model.predict(input)
+    return prediction
+try:
+    severity_prediction = severity_predictor(user_input)
+    st.write("Accident traffic impact severity:")
+    st.write(severity_prediction)
+except Exception as e2:
+    st.write("Error loading model:", e2)
+
