@@ -6,4 +6,3 @@ requests
 datetime
 numpy
 pandas
-pickle
