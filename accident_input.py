@@ -121,7 +121,7 @@ user_input = pd.DataFrame(inputs, columns=columns)
 model_features = pd.read_csv("model_features.csv").drop(columns="Unnamed: 0", errors="ignore").drop(13)
 # Reorder the input features to match what the model expects to see     
 user_input = user_input[model_features["Feature"].values] 
-st.write(accident_input)
+st.write(user_input )
 
 # Test loading the model
 try:
