@@ -1,0 +1,15 @@
+,Feature
+0,Start_Lat
+1,Start_Lng
+2,Zipcode
+3,Temperature(F)
+4,Wind_Chill(F)
+5,Humidity(%)
+6,Pressure(in)
+7,Visibility(mi)
+8,Wind_Speed(mph)
+9,Traffic_Signal
+10,Start_Month
+11,Start_Day
+12,Start_Hour
+13,Severity
