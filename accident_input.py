@@ -7,6 +7,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 import joblib
+import pickle
 
 # Set Streamlit layout
 st.set_page_config(layout="wide")
