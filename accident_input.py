@@ -131,7 +131,7 @@ st.write(user_input )
 # Test loading the model
 st.title("Test load model.")
 try:
-    with open(model_path, 'rb') as file:
+    with open('applet_model.pkl', 'rb') as file:
             model = pickle.load(file)
     st.write("Model loaded successfully.")
 except Exception as e1:
@@ -140,7 +140,7 @@ except Exception as e1:
 # Test loading the model
 st.title("Attempt to generate prediction.")
 # Define the model
-with open(model_path, 'rb') as file:
+with open('applet_model.pkl', 'rb') as file:
             model = pickle.load(file))
 # Define callable prediction function to invoke the model on input data
 def severity_predictor(input):
