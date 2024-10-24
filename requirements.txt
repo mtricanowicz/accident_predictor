@@ -1,0 +1,9 @@
+streamlit
+folium
+streamlit_folium
+geopy
+requests
+datetime
+numpy
+pandas
+joblib
