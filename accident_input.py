@@ -8,6 +8,9 @@ import numpy as np
 import pandas as pd
 import joblib
 
+# Set Streamlit layout
+st.set_page_config(layout="wide")
+
 # Set a starting location on the map (the Dubois Center)
 lat_start = 35.22862041030688
 lon_start = -80.83445778852331
