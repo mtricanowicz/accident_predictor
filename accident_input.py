@@ -141,7 +141,7 @@ except Exception as e1:
 st.title("Attempt to generate prediction.")
 # Define the model
 with open('applet_model.pkl', 'rb') as file:
-            model = pickle.load(file))
+            model = pickle.load(file)
 # Define callable prediction function to invoke the model on input data
 def severity_predictor(input):
     # Generate prediction    
