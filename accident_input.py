@@ -146,9 +146,9 @@ def severity_predictor(input):
     prediction = model.predict(input)
     return prediction
 try:
-    prediction = severity_predictor(user_input)
+    severity_prediction = severity_predictor(user_input)
     st.write("Accident traffic impact severity:")
-    st.write(prediction)
+    st.write(severity_prediction)
 except Exception as e2:
     st.write("Error loading model:", e2)
 
