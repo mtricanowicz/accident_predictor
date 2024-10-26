@@ -1,0 +1,2 @@
+,bootstrap,ccp_alpha,class_weight,criterion,max_depth,max_features,max_leaf_nodes,max_samples,min_impurity_decrease,min_samples_leaf,min_samples_split,min_weight_fraction_leaf,monotonic_cst,n_estimators,n_jobs,oob_score,random_state,verbose,warm_start
+0,True,0.0,,gini,30,log2,5000,,0.0,1,2,0.0,,200,,False,61562024,0,False
