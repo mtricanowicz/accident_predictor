@@ -4,14 +4,9 @@ import pandas as pd
 import pickle
 
 # Statistics libraries
-from sklearn import model_selection, metrics, tree, linear_model, ensemble
-from sklearn.experimental import enable_halving_search_cv
-from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV, HalvingGridSearchCV
-from sklearn.preprocessing import MinMaxScaler, StandardScaler, PolynomialFeatures
-from sklearn.linear_model import LinearRegression, Ridge, Lasso, LogisticRegression
-from sklearn.tree import DecisionTreeClassifier, export_graphviz, plot_tree
+import sklearn
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix, classification_report, make_scorer, f1_score, accuracy_score, precision_score, recall_score, roc_curve, roc_auc_score, ConfusionMatrixDisplay
 
 # Import prepared model data set
 model_data = pd.read_csv("model_applet_data.csv")
