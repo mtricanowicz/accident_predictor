@@ -157,24 +157,22 @@ try:
     if severity_prediction==1:
          message = "Minor"
          color = "green"
-         size = 12
+         size = 22
     elif severity_prediction==2:
          message = "Moderate"
          color = "yellow"
-         size = 14
+         size = 24
     elif severity_prediction==3:
          message = "Major"
          color = "orange"
-         size = 16
+         size = 26
     elif severity_prediction==4:
          message = "SEVERE"
          color = "red"
-         size = 18
+         size = 28
     st.title("Accident traffic impact severity:")
-    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{severity_prediction}</h1>", unsafe_allow_html=True)
-    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)
-    st.title(severity_prediction[0])
-    st.title(message)
+    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{severity_prediction[0]}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)    
 except Exception as e2:
     st.write("Error running model:", e2)
 
