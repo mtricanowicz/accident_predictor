@@ -7,6 +7,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 import pickle
+import sklearn
 
 # Set Streamlit layout
 st.set_page_config(layout="wide")
