@@ -157,16 +157,22 @@ try:
     if severity_prediction==1:
          message = "Minor"
          color = "green"
+         size = 12
     elif severity_prediction==2:
          message = "Moderate"
          color = "yellow"
+         size = 14
     elif severity_prediction==3:
          message = "Major"
          color = "orange"
+         size = 16
     elif severity_prediction==4:
          message = "SEVERE"
          color = "red"
+         size = 18
     st.title("Accident traffic impact severity:")
+    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{severity_prediction}</h1>", unsafe_allow_html=True)
+    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)
     st.title(severity_prediction[0])
     st.title(message)
 except Exception as e2:
