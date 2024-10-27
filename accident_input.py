@@ -123,8 +123,8 @@ columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "
 inputs = [[timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, pressure, visibility, humidity, wind_speed, traffic_signal]]
 user_input = pd.DataFrame(inputs, columns=columns)
 # Import the optimized model features                                   
-model_features = pd.read_csv("model_features.csv").drop(columns="Unnamed: 0", errors="ignore")
-model_features = model_features[model_features['Feature'] != "Severity"]
+model_features = pd.read_csv("model_features.csv").drop(columns="Unnamed: 0", errors="ignore", axis=1)
+model_features = model_features[model_features["Feature"] != "Severity"]
 # Reorder the input features to match what the model expects to see     
 user_input = user_input[model_features["Feature"].values] 
 st.write(user_input )
