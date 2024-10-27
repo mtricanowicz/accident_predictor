@@ -127,7 +127,7 @@ model_features = pd.read_csv("model_features.csv")
 model_features = model_features[model_features["Feature"] != "Severity"]
 # Reorder the input features to match what the model expects to see     
 user_input = user_input[model_features["Feature"].values] 
-st.write(user_input )
+st.write(user_input)
 
 # Test loading the model
 st.title("Test load model.")
