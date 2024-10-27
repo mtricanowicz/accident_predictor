@@ -119,7 +119,7 @@ else:
     traffic_signal = True
 
 # Store accident conditions in a DataFrame
-st.title("Input data for prediction model.")
+#st.title("Input data for prediction model.")
 columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
 inputs = [[timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
 user_input = pd.DataFrame(inputs, columns=columns)
@@ -166,8 +166,8 @@ try:
     elif severity_prediction==4:
          message = "SEVERE"
          color = "red"
-    st.write("Accident traffic impact severity:")
-    st.title(severity_prediction)
+    st.title("Accident traffic impact severity:")
+    st.title(severity_prediction[0])
     st.title(message)
 except Exception as e2:
     st.write("Error running model:", e2)
