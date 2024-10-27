@@ -95,13 +95,13 @@ if map_output['last_clicked'] is not None:
         visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
         humidity = weather_data['main']['humidity']
         wind_speed = weather_data['wind']['speed']
-        # Display weather information
-        st.write(f"Temperature: {temp} °F")
-        st.write(f"Wind Chill: {wind_chill} °F")
-        st.write(f"Pressure: {np.round(pressure, 2)} inHg")
-        st.write(f"Visibility: {np.round(visibility, 2)} miles")
-        st.write(f"Humidity: {humidity} %")
-        st.write(f"Wind Speed: {wind_speed} mph")        
+        # Display weather information (not displayed in production app)
+        #st.write(f"Temperature: {temp} °F")
+        #st.write(f"Wind Chill: {wind_chill} °F")
+        #st.write(f"Pressure: {np.round(pressure, 2)} inHg")
+        #st.write(f"Visibility: {np.round(visibility, 2)} miles")
+        #st.write(f"Humidity: {humidity} %")
+        #st.write(f"Wind Speed: {wind_speed} mph")        
     else:
         st.write("Weather data could not be retrieved.")
 else:
@@ -128,19 +128,20 @@ model_features = pd.read_csv("model_features.csv")
 model_features = model_features[model_features["Feature"] != "Severity"]
 # Reorder the input features to match what the model expects to see     
 user_input = user_input[model_features["Feature"].values] 
-st.write(user_input)
+# Display model input DataFrame (not displayed in production app)
+#st.write(user_input) 
 
 # Test loading the model
-st.title("Test load model.")
-try:
-    with open('applet_model.pkl', 'rb') as file:
-            model = pickle.load(file)
-    st.write("Model loaded successfully.")
-except Exception as e1:
-    st.write("Error loading model:", e1)
+#st.title("Test load model.")
+#try:
+#    with open('applet_model.pkl', 'rb') as file:
+#            model = pickle.load(file)
+#    st.write("Model loaded successfully.")
+#except Exception as e1:
+#    st.write("Error loading model:", e1)
 
-# Test loading the model
-st.title("Attempt to generate prediction.")
+# Generate predictions
+#st.title("Attempt to generate prediction.")
 # Define the model
 with open('applet_model.pkl', 'rb') as file:
             model = pickle.load(file)
@@ -149,10 +150,25 @@ def severity_predictor(input):
     # Generate prediction    
     prediction = model.predict(input)
     return prediction
+
+# Run and display prediction
 try:
     severity_prediction = severity_predictor(user_input)
+    if prediction==1:
+         message = "Minor"
+         color = "green"
+    elif prediction==2:
+         message = "Moderate"
+         color = "yellow"
+    elif prediction==3:
+         message = "Major"
+         color = "orange"
+    elif prediction==4:
+         message = "SEVERE"
+         color = "red"
     st.write("Accident traffic impact severity:")
-    st.write(severity_prediction)
+    st.title(severity_prediction)
+    st.title(message)
 except Exception as e2:
-    st.write("Error loading model:", e2)
+    st.write("Error running model:", e2)
 
