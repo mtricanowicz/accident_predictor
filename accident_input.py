@@ -154,16 +154,16 @@ def severity_predictor(input):
 # Run and display prediction
 try:
     severity_prediction = severity_predictor(user_input)
-    if prediction==1:
+    if severity_prediction==1:
          message = "Minor"
          color = "green"
-    elif prediction==2:
+    elif severity_prediction==2:
          message = "Moderate"
          color = "yellow"
-    elif prediction==3:
+    elif severity_prediction==3:
          message = "Major"
          color = "orange"
-    elif prediction==4:
+    elif severity_prediction==4:
          message = "SEVERE"
          color = "red"
     st.write("Accident traffic impact severity:")
