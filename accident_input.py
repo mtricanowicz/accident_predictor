@@ -6,6 +6,7 @@ import requests
 from datetime import datetime
 import numpy as np
 import pandas as pd
+import math
 import pickle
 import sklearn
 
@@ -16,8 +17,7 @@ st.set_page_config(layout="wide")
 lat_start = 35.22862041030688
 lon_start = -80.83445778852331
 
-# Define the openweathermaps.org API components
-# Define the API key to use
+# Define the openweathermaps.org API key to use
 API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
 
 # Initialize the Streamlit app with a selectable map
@@ -63,6 +63,7 @@ visibility = weather_data['visibility'] / 1609.34 # convert API data from meters
 humidity = weather_data['main']['humidity']
 wind_speed = weather_data['wind']['speed']
 
+##### PROCESS USER'S ACCIDENT INPUT #####
 # Check if the user clicked on the map and retrieve the coordinates
 if map_output['last_clicked'] is not None:
     lat = map_output['last_clicked']['lat']
@@ -107,18 +108,42 @@ if map_output['last_clicked'] is not None:
 else:
     st.write("Click on the map to select a point.")
 
-# Prompt user to specify whether or not a traffic signal is nearby
-st.title("Is there a traffic signal nearby?")
-user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
+
+##### TRAFFIC SIGNAL INPUT ##### [UNUSED]
+# Prompt user to specify whether or not a traffic signal is nearby (not used in production app, presence of traffic signal pulled from OpenStreetMaps API instead)
+#st.title("Is there a traffic signal nearby?")
+#user_response = st.radio("Is there a traffic signal nearby?", ("Yes", "No"))
 # Store the response in a variable
-if user_response=="Yes":
-    traffic_signal = True
-elif user_response=="No":
+#if user_response=="Yes":
+#    traffic_signal = True
+#elif user_response=="No":
+#    traffic_signal = False
+#else:
+#    traffic_signal = True
+
+
+##### TRAFFIC SIGNAL PRESENCE #####
+# 
+# Define OSM's Overpass API URL
+url = "http://overpass-api.de/api/interpreter"
+# Define Overpass query to retrieve traffic signals within 400 meters (about 1/4 mile) from the selected accident location
+query = f"""
+[out:json];
+node["highway"="traffic_signals"](around:400,{lat},{lon});
+out body;
+"""
+# Send the request
+response = requests.get(url, params={'data': query})
+# Parse response JSON
+traffic_presence = response.json()
+# Define the traffic_signal variable. An empty set returned from the OSM query implies no traffic signals within the 1/4 mile radius
+if traffic_presence['elements']==[]:
     traffic_signal = False
 else:
     traffic_signal = True
 
-# Store accident conditions in a DataFrame
+
+##### Store accident conditions in a DataFrame #####
 #st.title("Input data for prediction model.")
 columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
 inputs = [[timestamp.month, timestamp.day, timestamp.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
@@ -131,7 +156,8 @@ user_input = user_input[model_features["Feature"].values]
 # Display model input DataFrame (not displayed in production app)
 #st.write(user_input) 
 
-# Test loading the model
+
+##### Test loading the model ##### [UNUSED]
 #st.title("Test load model.")
 #try:
 #    with open('applet_model.pkl', 'rb') as file:
@@ -140,7 +166,8 @@ user_input = user_input[model_features["Feature"].values]
 #except Exception as e1:
 #    st.write("Error loading model:", e1)
 
-# Generate predictions
+
+##### Generate predictions #####
 #st.title("Attempt to generate prediction.")
 # Define the model
 with open('applet_model.pkl', 'rb') as file:
@@ -151,7 +178,8 @@ def severity_predictor(input):
     prediction = model.predict(input)
     return prediction
 
-# Run and display prediction
+
+##### Run and display prediction #####
 try:
     severity_prediction = severity_predictor(user_input)
     if severity_prediction==1:
