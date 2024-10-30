@@ -200,7 +200,7 @@ def severity_predictor(input):
 
 
 ##### Run and display prediction #####
-if map_output['last_clicked'] is not None:
+if map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is not None:
     try:
         severity_prediction = severity_predictor(user_input)
         if severity_prediction==1:
