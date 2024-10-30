@@ -29,7 +29,7 @@ m = folium.Map(location=[lat_start, lon_start], zoom_start=15)
 # Add a click event to the map to capture user-selected point
 m.add_child(folium.LatLngPopup())
 # Display the map in Streamlit and capture the click event
-map_output = st_folium(m, width=1200, height=800)
+map_output = st_folium(m)
 
 # Function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
