@@ -7,3 +7,5 @@ datetime
 numpy
 pandas
 scikit-learn
+pytz
+timezonefinder

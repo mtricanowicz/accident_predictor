@@ -9,6 +9,8 @@ import pandas as pd
 import math
 import pickle
 import sklearn
+import pytz
+from timezonefinder import TimezoneFinder
 
 # Set Streamlit layout
 st.set_page_config(layout="wide")
@@ -28,7 +30,10 @@ m = folium.Map(location=[lat_start, lon_start], zoom_start=15)
 
 # Add a click event to the map to capture user-selected point
 m.add_child(folium.LatLngPopup())
-timestamp = datetime.now()
+
+# Define variable that will get the timezone name based on latitude and longitude
+tf = TimezoneFinder()
+timezone_str = tf.timezone_at(lat=lat, lng=lon)
 
 # Display the map in Streamlit and capture the click event
 map_output = st_folium(m, width=1200, height=800)
@@ -69,8 +74,15 @@ if map_output['last_clicked'] is not None:
     lat = map_output['last_clicked']['lat']
     lon = map_output['last_clicked']['lng']
 
-    # Display time of click
-    st.write(f"Accident Time: {timestamp}")
+    # Apply the timezone
+    if timezone_str:
+        local_timezone = pytz.timezone(timezone_str)
+        local_time = datetime.now(local_timezone)
+        #print("Current local time:", local_time.strftime('%Y-%m-%d %H:%M:%S'))
+        # Display time of click
+        st.write(f"Accident Time: {timestamp}")
+    else:
+        st.write("Timezone could not be determined for the given coordinates.")
 
     # Display the selected latitude and longitude
     st.write(f"Selected Latitude: {lat}")
