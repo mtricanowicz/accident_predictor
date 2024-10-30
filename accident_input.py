@@ -226,4 +226,4 @@ if map_output['last_clicked'] is not None and weather_data is not None and rever
     except Exception as e2:
         st.write("Error running model:", e2)
 elif map_output['last_clicked'] is not None:
-    st.write("Prediction cannot be generated. Please select an address within the contiguous United States.")
+    st.write("Prediction cannot be generated. Please try again.")
