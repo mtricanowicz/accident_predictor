@@ -48,6 +48,10 @@ def get_weather_data(lat, lon, api_key):
     else:
         return None
 
+# Instantiate the location to the default starting location
+lat = lat_start
+lon = lon_start
+zipcode = reverse_geocode(lat, lon).get('postcode')
 # Define variable that will get the timezone name based on latitude and longitude
 tf = timezonefinder.TimezoneFinder()
 timezone_str = tf.timezone_at(lat=lat, lng=lon)
@@ -55,10 +59,6 @@ timezone_str = tf.timezone_at(lat=lat, lng=lon)
 local_timezone = pytz.timezone(timezone_str)
 local_time = datetime.now(local_timezone)
 local_time = pd.to_datetime(local_time, format='ISO8601')
-# Instantiate the location to the default starting location
-lat = lat_start
-lon = lon_start
-zipcode = reverse_geocode(lat, lon).get('postcode')
 # Retrieve the weather information for the default starting location
 weather_data = get_weather_data(lat, lon, API_KEY)
 temp = weather_data['main']['temp']
