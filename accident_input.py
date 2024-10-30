@@ -164,17 +164,18 @@ else:
 
 
 ##### Store accident conditions in a DataFrame #####
-#st.title("Input data for prediction model.")
-columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
-inputs = [[local_time.month, local_time.day, local_time.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
-user_input = pd.DataFrame(inputs, columns=columns)
 # Import the optimized model features                                   
 model_features = pd.read_csv("model_features.csv")
 model_features = model_features[model_features["Feature"] != "Severity"]
-# Reorder the input features to match what the model expects to see     
-user_input = user_input[model_features["Feature"].values] 
-# Display model input DataFrame (not displayed in production app)
-#st.write(user_input) 
+if weather_data is not None and reverse_geocode(lat, lon) is not None:
+    columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Zipcode", "Temperature(F)", "Wind_Chill(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
+    inputs = [[local_time.month, local_time.day, local_time.hour, lat, lon, zipcode, temp, wind_chill, pressure, visibility, humidity, wind_speed, traffic_signal]]
+    user_input = pd.DataFrame(inputs, columns=columns)
+    # Reorder the input features to match what the model expects to see     
+    user_input = user_input[model_features["Feature"].values] 
+    # Display model input DataFrame (not displayed in production app)
+    #st.write("Features to load into model:")
+    #st.write(user_input) 
 
 
 ##### Test loading the model ##### [UNUSED]
