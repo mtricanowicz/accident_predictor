@@ -225,4 +225,5 @@ if map_output['last_clicked'] is not None and weather_data is not None and rever
         st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)    
     except Exception as e2:
         st.write("Error running model:", e2)
-
+else:
+    st.write("Prediction cannot be generated. Please select an address within the contiguous United States.")
