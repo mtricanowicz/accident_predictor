@@ -48,6 +48,13 @@ def get_weather_data(lat, lon, api_key):
     else:
         return None
 
+# Define variable that will get the timezone name based on latitude and longitude
+tf = timezonefinder.TimezoneFinder()
+timezone_str = tf.timezone_at(lat=lat, lng=lon)
+# Instantiate the current time
+local_timezone = pytz.timezone(timezone_str)
+local_time = datetime.now(local_timezone)
+local_time = pd.to_datetime(local_time, format='ISO8601')
 # Instantiate the location to the default starting location
 lat = lat_start
 lon = lon_start
@@ -68,9 +75,7 @@ if map_output['last_clicked'] is not None:
     lon = map_output['last_clicked']['lng']
 
     # Apply the timezone
-    # Define variable that will get the timezone name based on latitude and longitude
-    tf = timezonefinder.TimezoneFinder()
-    timezone_str = tf.timezone_at(lat=lat, lng=lon)
+    
     if timezone_str:
         local_timezone = pytz.timezone(timezone_str)
         local_time = datetime.now(local_timezone)
