@@ -37,7 +37,8 @@ def reverse_geocode(lat, lon):
     location = geolocator.reverse((lat, lon), exactly_one=True)
     if location:
         return location.raw['address']
-    return "Address not found"
+    else:
+        return "Address not found"
 
 # Function to fetch weather data from OpenWeatherMap
 def get_weather_data(lat, lon, api_key):
@@ -46,7 +47,7 @@ def get_weather_data(lat, lon, api_key):
     if response.status_code == 200:
         return response.json()
     else:
-        return None
+        return "Weather not found"
 
 # Instantiate the location to the default starting location
 lat = lat_start
