@@ -49,36 +49,39 @@ def get_weather_data(lat, lon, api_key):
     else:
         return "Weather not found"
 
-# Instantiate the location to the default starting location
-lat = lat_start
-lon = lon_start
-zipcode = reverse_geocode(lat, lon).get('postcode')
 # Define variable that will get the timezone name based on latitude and longitude
 tf = timezonefinder.TimezoneFinder()
-timezone_str = tf.timezone_at(lat=lat, lng=lon)
-# Instantiate the current time
-local_timezone = pytz.timezone(timezone_str)
-local_time = datetime.now(local_timezone)
-local_time = pd.to_datetime(local_time, format='ISO8601')
-# Retrieve the weather information for the default starting location
-weather_data = get_weather_data(lat, lon, API_KEY)
-temp = weather_data['main']['temp']
-wind_chill = weather_data['main']['feels_like']
-pressure = weather_data['main']['pressure'] * 0.2953 # convert API data from hPA to inHg
-visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
-humidity = weather_data['main']['humidity']
-wind_speed = weather_data['wind']['speed']
+
 
 ##### PROCESS USER'S ACCIDENT INPUT #####
 # Check if the user clicked on the map and retrieve the coordinates
 if map_output['last_clicked'] is None:
+    # Instantiate the location to the default starting location
+    lat = lat_start
+    lon = lon_start
+    zipcode = reverse_geocode(lat, lon).get('postcode')
+    
+    # Instantiate the current time
+    timezone_str = tf.timezone_at(lat=lat, lng=lon)
+    local_timezone = pytz.timezone(timezone_str)
+    local_time = datetime.now(local_timezone)
+    local_time = pd.to_datetime(local_time, format='ISO8601')
+    # Retrieve the weather information for the default starting location
+    weather_data = get_weather_data(lat, lon, API_KEY)
+    temp = weather_data['main']['temp']
+    wind_chill = weather_data['main']['feels_like']
+    pressure = weather_data['main']['pressure'] * 0.2953 # convert API data from hPA to inHg
+    visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
+    humidity = weather_data['main']['humidity']
+    wind_speed = weather_data['wind']['speed']
     st.write("Click on the map to select a point.")
+
 elif map_output['last_clicked'] is not None:
     lat = map_output['last_clicked']['lat']
     lon = map_output['last_clicked']['lng']
+    timezone_str = tf.timezone_at(lat=lat, lng=lon)
 
     # Apply the timezone
-    
     if timezone_str:
         local_timezone = pytz.timezone(timezone_str)
         local_time = datetime.now(local_timezone)
@@ -88,11 +91,11 @@ elif map_output['last_clicked'] is not None:
         #st.write(f"Accident Time: {local_time}")
     else:
         st.write("Timezone could not be determined for the given coordinates.")
-
+    
     # Display the selected latitude and longitude
     st.write(f"Selected Latitude: {lat}")
     st.write(f"Selected Longitude: {lon}")
-
+    
     # Reverse geocode the selected lat/lng to get address details and display address
     house_number = reverse_geocode(lat, lon).get('house_number')
     street = reverse_geocode(lat, lon).get('road')
@@ -101,10 +104,9 @@ elif map_output['last_clicked'] is not None:
     zipcode = reverse_geocode(lat, lon).get('postcode')
     address = f"{house_number} {street}, {city}, {state} {zipcode}"
     st.write(f"Address: {address}")
-
+    
     # Fetch weather data based on the selected location
     weather_data = get_weather_data(lat, lon, API_KEY)
-
     if weather_data:
         # Define weather information
         temp = weather_data['main']['temp']
@@ -122,7 +124,6 @@ elif map_output['last_clicked'] is not None:
         #st.write(f"Wind Speed: {wind_speed} mph")        
     else:
         st.write("Weather data could not be retrieved.")
-
 
 
 ##### TRAFFIC SIGNAL INPUT ##### [UNUSED]
