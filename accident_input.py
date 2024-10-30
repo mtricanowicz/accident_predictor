@@ -19,6 +19,15 @@ st.set_page_config(layout="wide")
 lat_start = 35.22862041030688
 lon_start = -80.83445778852331
 
+# Initialize the Streamlit app with a selectable map
+st.title("Identify accident location by selecting a point on the map.")
+# Create a map centered on some initial location (e.g., San Francisco)
+m = folium.Map(location=[lat_start, lon_start], zoom_start=15)
+# Add a click event to the map to capture user-selected point
+m.add_child(folium.LatLngPopup())
+# Display the map in Streamlit and capture the click event
+map_output = st_folium(m, width=1200, height=800)
+
 # Define the openweathermaps.org API key to use
 API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
 
@@ -59,15 +68,6 @@ pressure = weather_data['main']['pressure'] * 0.2953 # convert API data from hPA
 visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
 humidity = weather_data['main']['humidity']
 wind_speed = weather_data['wind']['speed']
-
-# Initialize the Streamlit app with a selectable map
-st.title("Identify accident location by selecting a point on the map.")
-# Create a map centered on some initial location (e.g., San Francisco)
-m = folium.Map(location=[lat_start, lon_start], zoom_start=15)
-# Add a click event to the map to capture user-selected point
-m.add_child(folium.LatLngPopup())
-# Display the map in Streamlit and capture the click event
-map_output = st_folium(m, width=1200, height=800)
 
 ##### PROCESS USER'S ACCIDENT INPUT #####
 # Check if the user clicked on the map and retrieve the coordinates
