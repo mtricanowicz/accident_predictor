@@ -78,9 +78,9 @@ if map_output['last_clicked'] is not None:
         local_timezone = pytz.timezone(timezone_str)
         local_time = datetime.now(local_timezone)
         local_time = pd.to_datetime(local_time, format='ISO8601')
-        #print("Current local time:", local_time.strftime('%Y-%m-%d %H:%M:%S'))
         # Display time of click
-        st.write(f"Accident Time: {local_time}")
+        st.write("Accident Time:", local_time.strftime('%Y-%m-%d %H:%M:%S'))
+        #st.write(f"Accident Time: {local_time}")
     else:
         st.write("Timezone could not be determined for the given coordinates.")
 
