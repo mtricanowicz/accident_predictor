@@ -38,7 +38,7 @@ def reverse_geocode(lat, lon):
     if location:
         return location.raw['address']
     else:
-        return "Address not found"
+        return None
 
 # Function to fetch weather data from OpenWeatherMap
 def get_weather_data(lat, lon, api_key):
@@ -47,7 +47,7 @@ def get_weather_data(lat, lon, api_key):
     if response.status_code == 200:
         return response.json()
     else:
-        return "Weather not found"
+        return None
 
 # Define variable that will get the timezone name based on latitude and longitude
 tf = timezonefinder.TimezoneFinder()
@@ -97,13 +97,16 @@ elif map_output['last_clicked'] is not None:
     st.write(f"Selected Longitude: {lon}")
     
     # Reverse geocode the selected lat/lng to get address details and display address
-    house_number = reverse_geocode(lat, lon).get('house_number')
-    street = reverse_geocode(lat, lon).get('road')
-    city = reverse_geocode(lat, lon).get('city')
-    state = reverse_geocode(lat, lon).get('state')
-    zipcode = reverse_geocode(lat, lon).get('postcode')
-    address = f"{house_number} {street}, {city}, {state} {zipcode}"
-    st.write(f"Address: {address}")
+    if reverse_geocode(lat, lon):
+        house_number = reverse_geocode(lat, lon).get('house_number')
+        street = reverse_geocode(lat, lon).get('road')
+        city = reverse_geocode(lat, lon).get('city')
+        state = reverse_geocode(lat, lon).get('state')
+        zipcode = reverse_geocode(lat, lon).get('postcode')
+        address = f"{house_number} {street}, {city}, {state} {zipcode}"
+        st.write(f"Address: {address}")
+    else:
+        st.write("Address data could not be retrieved.")
     
     # Fetch weather data based on the selected location
     weather_data = get_weather_data(lat, lon, API_KEY)
