@@ -70,7 +70,9 @@ wind_speed = weather_data['wind']['speed']
 
 ##### PROCESS USER'S ACCIDENT INPUT #####
 # Check if the user clicked on the map and retrieve the coordinates
-if map_output['last_clicked'] is not None:
+if map_output['last_clicked'] is None:
+    st.write("Click on the map to select a point.")
+elif map_output['last_clicked'] is not None:
     lat = map_output['last_clicked']['lat']
     lon = map_output['last_clicked']['lng']
 
@@ -119,8 +121,7 @@ if map_output['last_clicked'] is not None:
         #st.write(f"Wind Speed: {wind_speed} mph")        
     else:
         st.write("Weather data could not be retrieved.")
-else:
-    st.write("Click on the map to select a point.")
+
 
 
 ##### TRAFFIC SIGNAL INPUT ##### [UNUSED]
