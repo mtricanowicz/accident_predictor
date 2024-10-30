@@ -194,27 +194,28 @@ def severity_predictor(input):
 
 
 ##### Run and display prediction #####
-try:
-    severity_prediction = severity_predictor(user_input)
-    if severity_prediction==1:
-         message = "Minor"
-         color = "green"
-         size = 22
-    elif severity_prediction==2:
-         message = "Moderate"
-         color = "yellow"
-         size = 24
-    elif severity_prediction==3:
-         message = "Major"
-         color = "orange"
-         size = 26
-    elif severity_prediction==4:
-         message = "SEVERE"
-         color = "red"
-         size = 28
-    st.title("Accident traffic impact severity:")
-    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{severity_prediction[0]}</h1>", unsafe_allow_html=True)
-    st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)    
-except Exception as e2:
-    st.write("Error running model:", e2)
+if map_output['last_clicked'] is not None:
+    try:
+        severity_prediction = severity_predictor(user_input)
+        if severity_prediction==1:
+            message = "Minor"
+            color = "green"
+            size = 22
+        elif severity_prediction==2:
+            message = "Moderate"
+            color = "yellow"
+            size = 24
+        elif severity_prediction==3:
+            message = "Major"
+            color = "orange"
+            size = 26
+        elif severity_prediction==4:
+            message = "SEVERE"
+            color = "red"
+            size = 28
+        st.title("Accident traffic impact severity:")
+        st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{severity_prediction[0]}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)    
+    except Exception as e2:
+        st.write("Error running model:", e2)
 
