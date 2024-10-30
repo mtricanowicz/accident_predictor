@@ -77,6 +77,7 @@ if map_output['last_clicked'] is not None:
     if timezone_str:
         local_timezone = pytz.timezone(timezone_str)
         local_time = datetime.now(local_timezone)
+        local_time = local_time.strftime('%Y-%m-%d %H:%M:%S')
         #print("Current local time:", local_time.strftime('%Y-%m-%d %H:%M:%S'))
         # Display time of click
         st.write(f"Accident Time: {local_time}")
