@@ -11,6 +11,7 @@ import pickle
 import sklearn
 import pytz
 import timezonefinder
+import gdown
 
 # Set Streamlit layout
 st.set_page_config(layout="wide")
@@ -190,6 +191,11 @@ if weather_data is not None and reverse_geocode(lat, lon) is not None:
 
 ##### Generate predictions #####
 #st.title("Attempt to generate prediction.")
+# Retrieve model .pkl file from Google Drive
+# Specify Google Drive file ID (replace 'YOUR_FILE_ID' with your file's ID)
+url = "https://drive.google.com/file/d/1ZGeXKWsFOTaNkRzIPxrnzXYcrlUMnGMI/view?usp=drive_link"
+# Download the file
+gdown.download(url, "applet_model.pkl", quiet=False)
 # Define the model
 with open('applet_model.pkl', 'rb') as file:
             model = pickle.load(file)
