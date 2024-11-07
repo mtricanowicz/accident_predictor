@@ -191,14 +191,13 @@ if weather_data is not None and reverse_geocode(lat, lon) is not None:
 
 ##### Generate predictions #####
 #st.title("Attempt to generate prediction.")
-# Retrieve model .pkl file from Google Drive
-# Specify Google Drive file ID (replace 'YOUR_FILE_ID' with your file's ID)
-url = "https://drive.google.com/file/d/1ZGeXKWsFOTaNkRzIPxrnzXYcrlUMnGMI/view?usp=drive_link"
-# Download the file
+# Retrieve model .pkl file from Google Drive by specifying the Google Drive file url and downloading the file
+file_id = "1ZGeXKWsFOTaNkRzIPxrnzXYcrlUMnGMI"
+url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "applet_model.pkl", quiet=False)
 # Define the model
 with open('applet_model.pkl', 'rb') as file:
-            model = pickle.load(file)
+    model = pickle.load(file)
 # Define callable prediction function to invoke the model on input data
 def severity_predictor(input):
     # Generate prediction    
