@@ -197,7 +197,7 @@ if weather_data is not None and reverse_geocode(lat, lon) is not None:
 ##### Generate predictions #####
 #st.title("Attempt to generate prediction.")
 # Retrieve model .pkl file from Google Drive by specifying the Google Drive file url and downloading the file
-file_id = "116jEJwjuX85vGdPidqv1CUk7MqgPZ7yI"
+file_id = "10QItqxS-5KhYFdtNtkBY6214Oc4pitOR"
 url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "applet_model.pkl", quiet=False)
 # Define the model
