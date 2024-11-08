@@ -190,10 +190,14 @@ if weather_data is not None and reverse_geocode(lat, lon) is not None:
 #    st.write("Error loading model:", e1)
 
 
+# Model file IDs from Google Drive
+# Random Forest Model - https://drive.google.com/file/d/116jEJwjuX85vGdPidqv1CUk7MqgPZ7yI/view?usp=drive_link
+# Blended RF+XGB Model - https://drive.google.com/file/d/10QItqxS-5KhYFdtNtkBY6214Oc4pitOR/view?usp=drive_link
+
 ##### Generate predictions #####
 #st.title("Attempt to generate prediction.")
 # Retrieve model .pkl file from Google Drive by specifying the Google Drive file url and downloading the file
-file_id = "10QItqxS-5KhYFdtNtkBY6214Oc4pitOR"
+file_id = "116jEJwjuX85vGdPidqv1CUk7MqgPZ7yI"
 url = f"https://drive.google.com/uc?id={file_id}"
 gdown.download(url, "applet_model.pkl", quiet=False)
 # Define the model
