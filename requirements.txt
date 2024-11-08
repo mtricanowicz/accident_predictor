@@ -10,3 +10,4 @@ scikit-learn
 pytz
 timezonefinder
 gdown
+xgboost
