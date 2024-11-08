@@ -12,6 +12,7 @@ import sklearn
 import pytz
 import timezonefinder
 import gdown
+import xgboost
 
 # Set Streamlit layout
 st.set_page_config(layout="wide")

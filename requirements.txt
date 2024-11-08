@@ -10,4 +10,4 @@ scikit-learn
 pytz
 timezonefinder
 gdown
-xgboost==2.1.2
+xgboost
