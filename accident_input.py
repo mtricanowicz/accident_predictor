@@ -224,7 +224,7 @@ with col2:
     ##### Generate predictions #####
     #st.title("Attempt to generate prediction.")
     # Retrieve model .pkl file from Google Drive by specifying the Google Drive file url and downloading the file
-    file_id = "1Q4b62ys0ooYfElCBZHn8M-u38ykzLkDL"
+    file_id = "143EKAWRozG165zuVP54h5MJdW40Pw1ls"
     url = f"https://drive.google.com/uc?id={file_id}"
     gdown.download(url, "applet_model.pkl", quiet=False)
     # Define the model
