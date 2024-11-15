@@ -266,7 +266,7 @@ with col2: # output area
         st.header("Navigate to and click on accident location on map.")
         st.divider()
     # Otherwise generate and display prediction
-    elif map_output['last_clicked'] is not None and weather_data is not None:
+    elif map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is not None:
         try:
             severity_prediction = severity_predictor(user_input)
             if severity_prediction==1:
@@ -292,9 +292,13 @@ with col2: # output area
             st.divider()  
         except Exception as e2:
             st.write("Error running model:", e2)
-    elif map_output['last_clicked'] is not None and weather_data is None:
+    elif map_output['last_clicked'] is not None and weather_data is None and reverse_geocode(lat, lon) is not None:
         st.divider()
         st.write("Failed to retrieve weather data. Please try again.")
+        st.divider()
+    elif map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is None:
+        st.divider()
+        st.write("Address not valid. Please try again.")
         st.divider()
     elif map_output['last_clicked'] is not None:
         st.divider()
