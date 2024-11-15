@@ -38,9 +38,44 @@ model_features = model_features[model_features["Feature"] != "Severity"]
 
 # Set page title
 st.header("Traffic Impact Predictor", divider="gray")
+
+
+##### RETRIEVE AND LOAD MODEL #####
+
+# Specify the Google Drive file url to enable download and retrieval of the model .pkl file from Google Drive 
+# Model file IDs from Google Drive
+# Random Forest Model - https://drive.google.com/file/d/143EKAWRozG165zuVP54h5MJdW40Pw1ls/view?usp=drive_link
+# XGBoost Model - https://drive.google.com/file/d/1_0kDivpnBZRuoSnYWgiG1z1Xln7oFf1D/view?usp=drive_link
+# Blended RF+XGB Model - https://drive.google.com/file/d/1Q4b62ys0ooYfElCBZHn8M-u38ykzLkDL/view?usp=drive_link
+file_id = "1_0kDivpnBZRuoSnYWgiG1z1Xln7oFf1D"
+url = f"https://drive.google.com/uc?id={file_id}"
+
+# Define function to download and load model, caching the result
+
+@st.cache_resource
+def load_model():
+    gdown.download(url, "applet_model.pkl", quiet=False)
+    # Define the model
+    with open('applet_model.pkl', 'rb') as file:
+        model = pickle.load(file)
+    return model
+
+# Load the model
+model = load_model()
+
+# Define callable prediction function to invoke the model on input data
+def severity_predictor(input):
+    # Generate prediction    
+    prediction = model.predict(input)
+    return prediction
+
+##### RETRIEVE AND LOAD MODEL COMPLETE ##### 
+
+
+# Display explanation of the app
 with st.expander(label="About this app."):
     st.write("The purpose of this app is to use a pretrained machine learning model to predict how severe the traffic impact will be as a result of an accident.") 
-    st.write(f"The current version of this app uses an XGBoost model trained on the following features: {', '.join(model_features["Feature"].astype(str))}")
+    st.write(f"The current version of this app uses a {model.__class__.__name__} model trained on the following features: {', '.join(model_features["Feature"].astype(str))}")
     st.write("""This app provides a means for a user to input an accident location. The location and time of the input, as well as accompanying geographic and weather data, is fed into the model to generate a prediction. 
              This app is designed to require as little user intervention as possible. A single click should be sufficient to obtain a prediction.\n
              This is accomplished by processing the user input as follows:
@@ -57,7 +92,8 @@ with st.expander(label="About this app."):
     st.write("Identify accident location by selecting a point on the map.")
 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 
-##### BEGIN FUNCTION DEFINITION SECTION #####
+
+##### DEFINE FUNCTIONS #####
 
 # Define the openweathermaps.org API key to use
 API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
@@ -83,32 +119,6 @@ def get_weather_data(lat, lon, api_key):
 # Define variable that will get the timezone name based on latitude and longitude
 tf = timezonefinder.TimezoneFinder()
 
-# Specify the Google Drive file url to enable download and retrieval of the model .pkl file from Google Drive 
-# Model file IDs from Google Drive
-# Random Forest Model - https://drive.google.com/file/d/143EKAWRozG165zuVP54h5MJdW40Pw1ls/view?usp=drive_link
-# XGBoost Model - https://drive.google.com/file/d/1_0kDivpnBZRuoSnYWgiG1z1Xln7oFf1D/view?usp=drive_link
-# Blended RF+XGB Model - https://drive.google.com/file/d/1Q4b62ys0ooYfElCBZHn8M-u38ykzLkDL/view?usp=drive_link
-file_id = "1_0kDivpnBZRuoSnYWgiG1z1Xln7oFf1D"
-url = f"https://drive.google.com/uc?id={file_id}"
-
-# Define function to download and load model, caching the result
-@st.cache_resource
-def load_model():
-    gdown.download(url, "applet_model.pkl", quiet=False)
-    # Define the model
-    with open('applet_model.pkl', 'rb') as file:
-        model = pickle.load(file)
-    return model
-
-# Load the model
-model = load_model()
-
-# Define callable prediction function to invoke the model on input data
-def severity_predictor(input):
-    # Generate prediction    
-    prediction = model.predict(input)
-    return prediction
-
 # Define function to convert latitude and longitude values from decimal to degrees/minutes/seconds format
 def decimal_to_dms(decimal_coord):
     # Determine if it's negative (for W or S)
@@ -127,7 +137,8 @@ def decimal_to_dms(decimal_coord):
         direction = 'N' if degrees >= 0 else 'E'
     return f"{degrees}° {minutes}' {seconds:.2f}\" {direction}"
 
-##### END FUNCTION DEFINITION SECTION #####
+##### DEFINE FUNCTIONS COMPLETE #####
+
 
 # Set columns
 col1, col2 = st.columns([2, 1])
