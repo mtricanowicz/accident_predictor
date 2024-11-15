@@ -83,7 +83,9 @@ with col2:
     ##### PROCESS USER'S ACCIDENT INPUT #####
     # Check if the user clicked on the map and retrieve the coordinates
     if map_output['last_clicked'] is None:
+        st.divider()
         st.header("Navigate to and click on accident location on map.")
+        st.divider()
         # Instantiate the location to the default starting location
         lat = lat_start
         lon = lon_start
