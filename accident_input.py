@@ -100,7 +100,7 @@ st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 ##### DEFINE FUNCTIONS #####
 
 # Define the openweathermaps.org API key to use
-API_KEY = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
+API_KEY_owm = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
 
 # Define function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
@@ -192,7 +192,7 @@ with col1: # map and user interaction area
         address = "Address data could not be retrieved."
     
     # Fetch weather data based on the selected location
-    weather_data = get_weather_data(lat, lon, API_KEY)
+    weather_data = get_weather_data(lat, lon, API_KEY_owm)
     if weather_data:
         # Define weather information
         temp = weather_data['main']['temp']
