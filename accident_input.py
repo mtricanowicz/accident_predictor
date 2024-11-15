@@ -271,21 +271,30 @@ with col2:
     elif map_output['last_clicked'] is not None:
         st.write("Prediction cannot be generated. Please try again.")
     
+    st.markdown("""
+        <style>
+        .custom-divider {
+            border-top: 1px solid #e0e0e0;
+            margin-top: 2px;   /* Adjusts the space above */
+            margin-bottom: 2px; /* Adjusts the space below */
+        }
+        </style>
+    """, unsafe_allow_html=True)
     with st.expander("Location Conditions"):
         if local_time is not None:
             # Display the time
-            st.divider()
+            st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
             st.write(f"Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
-            st.divider()
+            st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if lat is not None and lon is not None:
             # Display the selected latitude and longitude
             st.write(f"Latitude: {lat}")
             st.write(f"Longitude: {lon}")
-            st.divider()
+            st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if address is not None:
             # Display the nearest address
             st.write(f"Nearest Address: {address}")
-            st.divider()
+            st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if temp is not None and wind_chill is not None and pressure is not None and visibility is not None and humidity is not None and wind_speed is not None:
             # Display weather information (not displayed in production app)
             st.write(f"Temperature: {temp} °F")
@@ -294,8 +303,8 @@ with col2:
             st.write(f"Visibility: {np.round(visibility, 2)} miles")
             st.write(f"Humidity: {humidity} %")
             st.write(f"Wind Speed: {wind_speed} mph")
+            st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if address is not None:
             # Display traffic signal presence
-            st.divider()
             st.write(f"Traffic Signal within 1/4 mile: {traffic_signal}")
-            st.divider()
+            st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
