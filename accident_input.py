@@ -81,17 +81,17 @@ with st.expander(label="About this app."):
         Undersampling, data cleaning, and feature selection was performed on the original dataset to prepare it for model development.
     """)
     st.write("""This app provides a means for a user to input an accident location. The location and time of the input, as well as accompanying geographic and weather data, is fed into the model to generate a prediction. 
-        This app is designed to require as little user intervention as possible. A single click should be sufficient to obtain a prediction.\n
-        This is accomplished by processing the user input as follows:
-        1. The user click generates a latitude and longitude value.
-        2. The lat/lon is processed by timzonefinder and pytz to determine the local time zone.
-        3. A timestamp is applied at time of click with the local timezone to generate local time of the event.
-        4. The lat/lon is processed by the Nominatim geocoder of geopy to generate the nearest address to the event location.
-        5. The lat/lon is processed by the OpenWeatherMap API to fetch the weather conditions for the location and time of the event.
-        6. The lat/lon is processed by the OpenStreetMap Overpass API to fetch whether a traffic signal is present within 400 m (approx 1/4 mile) of the event location.
-        7. The processed data is then compiled into a dataframe as the input variables for the model.
-        8. The input dataframe is fed to the model to generate a severity prediction.
-        9. The prediction and input variables are displayed by the app in a user friendly format. 
+        This app is designed to require as little user intervention as possible. A single click should be sufficient to obtain a prediction.
+            This is accomplished by processing the user input as follows:
+             \n1. The user click generates a latitude and longitude value.
+             \n2. The lat/lon is processed by timzonefinder and pytz to determine the local time zone.
+             \n3. A timestamp is applied at time of click with the local timezone to generate local time of the event.
+             \n4. The lat/lon is processed by the Nominatim geocoder of geopy to generate the nearest address to the event location.
+             \n5. The lat/lon is processed by the OpenWeatherMap API to fetch the weather conditions for the location and time of the event.
+             \n6. The lat/lon is processed by the OpenStreetMap Overpass API to fetch whether a traffic signal is present within 400 m (approx 1/4 mile) of the event location.
+             \n7. The processed data is then compiled into a dataframe as the input variables for the model.
+             \n8. The input dataframe is fed to the model to generate a severity prediction.
+             \n9. The prediction and input variables are displayed by the app in a user friendly format. 
     """)
     st.write("Identify accident location by selecting a point on the map.")
 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
@@ -100,7 +100,7 @@ st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 ##### DEFINE FUNCTIONS #####
 
 # Define the openweathermaps.org API key to use
-API_KEY_owm = "0a2f1b71c8591af7c64f8dd7b5a31323" # my API key
+API_KEY_owm = st.secrets["API_KEY_owm"] # my API key
 
 # Define function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
@@ -283,6 +283,14 @@ with col2: # output area
             st.divider()  
         except Exception as e2:
             st.write("Error running model:", e2)
+    elif map_output['last_clicked'] is not None and weather_data is None and reverse_geocode(lat, lon) is not None:
+        st.divider()
+        st.write("Failed to retrieve weather data. Please try again.")
+        st.divider()
+    elif map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is None:
+        st.divider()
+        st.write("Address not valid. Please try again.")
+        st.divider()
     elif map_output['last_clicked'] is not None:
         st.divider()
         st.write("Prediction cannot be generated. Please try again.")
@@ -313,7 +321,7 @@ with col2: # output area
             # Display the nearest address
             st.write(f"🏪 Nearest Address: {address}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        if temp is not None and wind_chill is not None and pressure is not None and visibility is not None and humidity is not None and wind_speed is not None:
+        if weather_data is not None:
             # Display weather information (not displayed in production app)
             st.write(f"🌡️ Temperature: {temp} °F")
             st.write(f"🌥️ Pressure: {np.round(pressure, 2)} inHg")
@@ -321,7 +329,7 @@ with col2: # output area
             st.write(f"☀️ Humidity: {humidity} %")
             st.write(f"☁️ Wind Speed: {wind_speed} mph")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-        if address is not None:
+        if traffic_signal is not None:
             # Display traffic signal presence
             st.write(f"🚦 Traffic Signal within 1/4 mile: {traffic_signal}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
