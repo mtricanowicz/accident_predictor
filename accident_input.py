@@ -105,11 +105,18 @@ API_KEY_owm = st.secrets["API_Keys"]["API_KEY_owm"] # my API key
 # Define function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
     geolocator = Nominatim(user_agent="accident_input")
-    location = geolocator.reverse((lat, lon), exactly_one=True)
-    if location:
-        return location.raw['address']
-    else:
-        return None
+    try:
+        location = geolocator.reverse((lat, lon), exactly_one=True)
+        if location:
+            return location.raw['address']
+        else:
+            return None
+    except requests.Timeout:
+        return "Error: The request timed out. Please try again."
+    except requests.ConnectionError:
+        return "Error: Network connection error. Please check your internet connection and try again."
+    except Exception as e: # Handle any other unforeseen errors
+        return f"Error: An unexpected error occurred. Please try again. ({e})"
 
 # Define function to fetch weather data from OpenWeatherMap
 def get_weather_data(lat, lon, api_key):
@@ -119,7 +126,7 @@ def get_weather_data(lat, lon, api_key):
         return response.json()
     else:
         return None
-
+    
 # Define variable that will get the timezone name based on latitude and longitude
 tf = timezonefinder.TimezoneFinder()
 
@@ -181,7 +188,9 @@ with col1: # map and user interaction area
         local_time = "Timezone could not be determined for the given coordinates."
     
     # Reverse geocode the selected lat/lng to get address details and display address
-    if reverse_geocode(lat, lon):
+    if isinstance(reverse_geocode(lat, lon), str) and "Error" in reverse_geocode(lat, lon):
+        address = reverse_geocode(lat, lon)
+    elif reverse_geocode(lat, lon):
         house_number = reverse_geocode(lat, lon).get('house_number')
         street = reverse_geocode(lat, lon).get('road')
         city = reverse_geocode(lat, lon).get('city')
