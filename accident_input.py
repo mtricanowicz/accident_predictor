@@ -68,8 +68,8 @@ col1, col2 = st.columns([2, 1])
 with col1:
 
     # Set a starting location on the map (the Dubois Center)
-    lat_start = 35.22862041030688
-    lon_start = -80.83445778852331
+    lat_start = 35.2286
+    lon_start = -80.8348
 
     # Initialize the Streamlit app with a selectable map
     # Create a map centered on some initial location
@@ -96,6 +96,16 @@ with col2:
         local_timezone = pytz.timezone(timezone_str)
         local_time = datetime.now(local_timezone)
         local_time = pd.to_datetime(local_time, format='ISO8601')
+        # Reverse geocode the starting lat/lng to get address details and display address
+        if reverse_geocode(lat, lon):
+            house_number = reverse_geocode(lat, lon).get('house_number')
+            street = reverse_geocode(lat, lon).get('road')
+            city = reverse_geocode(lat, lon).get('city')
+            state = reverse_geocode(lat, lon).get('state')
+            zipcode = reverse_geocode(lat, lon).get('postcode')
+            address = f"{house_number} {street}, {city}, {state} {zipcode}"
+        else:
+            address = "Address data could not be retrieved."
         # Retrieve the weather information for the default starting location
         weather_data = get_weather_data(lat, lon, API_KEY)
         temp = weather_data['main']['temp']
@@ -261,16 +271,16 @@ with col2:
     elif map_output['last_clicked'] is not None:
         st.write("Prediction cannot be generated. Please try again.")
     
-    with st.expander("Accident Conditions"):
+    with st.expander("Location Conditions"):
         if local_time is not None:
             # Display the time
             st.divider()
-            st.write(f"Accident Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            st.write(f"Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
             st.divider()
         if lat is not None and lon is not None:
             # Display the selected latitude and longitude
-            st.write(f"Accident Latitude: {lat}")
-            st.write(f"Accident Longitude: {lon}")
+            st.write(f"Latitude: {lat}")
+            st.write(f"Longitude: {lon}")
             st.divider()
         if address is not None:
             # Display the nearest address
