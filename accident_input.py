@@ -262,24 +262,30 @@ with col2:
         st.write("Prediction cannot be generated. Please try again.")
     
     with st.expander("Accident Conditions"):
-        # Display the time
-        st.divider()
-        st.write(f"Accident Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        st.divider()
-        # Display the selected latitude and longitude
-        st.write(f"Accident Latitude: {lat}")
-        st.write(f"Accident Longitude: {lon}")
-        st.divider()
-        # Display the nearest address
-        st.write(f"Nearest Address: {address}")
-        st.divider()
-        # Display weather information (not displayed in production app)
-        st.write(f"Temperature: {temp} °F")
-        st.write(f"Wind Chill: {wind_chill} °F")
-        st.write(f"Pressure: {np.round(pressure, 2)} inHg")
-        st.write(f"Visibility: {np.round(visibility, 2)} miles")
-        st.write(f"Humidity: {humidity} %")
-        st.write(f"Wind Speed: {wind_speed} mph")
-        st.divider()
-        st.write(f"Traffic Signal within 1/4 mile: {traffic_signal}")
-        st.divider()
+        if local_time is not None:
+            # Display the time
+            st.divider()
+            st.write(f"Accident Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            st.divider()
+        if lat is not None and lon is not None:
+            # Display the selected latitude and longitude
+            st.write(f"Accident Latitude: {lat}")
+            st.write(f"Accident Longitude: {lon}")
+            st.divider()
+        if address is not None:
+            # Display the nearest address
+            st.write(f"Nearest Address: {address}")
+            st.divider()
+        if temp is not None and wind_chill is not None and pressure is not None and visibility is not None and humidity is not None and wind_speed is not None:
+            # Display weather information (not displayed in production app)
+            st.write(f"Temperature: {temp} °F")
+            st.write(f"Wind Chill: {wind_chill} °F")
+            st.write(f"Pressure: {np.round(pressure, 2)} inHg")
+            st.write(f"Visibility: {np.round(visibility, 2)} miles")
+            st.write(f"Humidity: {humidity} %")
+            st.write(f"Wind Speed: {wind_speed} mph")
+        if address is not None:
+            # Display traffic signal presence
+            st.divider()
+            st.write(f"Traffic Signal within 1/4 mile: {traffic_signal}")
+            st.divider()
