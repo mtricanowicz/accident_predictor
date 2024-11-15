@@ -115,14 +115,13 @@ with col2:
             local_time = datetime.now(local_timezone)
             local_time = pd.to_datetime(local_time, format='ISO8601')
             # Display time of click
-            st.write(f"Accident Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
-            #st.write(f"Accident Time: {local_time}")
+            #st.write(f"Accident Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
         else:
             st.write("Timezone could not be determined for the given coordinates.")
         
         # Display the selected latitude and longitude
-        st.write(f"Accident Latitude: {lat}")
-        st.write(f"Accident Longitude: {lon}")
+        #st.write(f"Accident Latitude: {lat}")
+        #st.write(f"Accident Longitude: {lon}")
         
         # Reverse geocode the selected lat/lng to get address details and display address
         if reverse_geocode(lat, lon):
@@ -132,7 +131,7 @@ with col2:
             state = reverse_geocode(lat, lon).get('state')
             zipcode = reverse_geocode(lat, lon).get('postcode')
             address = f"{house_number} {street}, {city}, {state} {zipcode}"
-            st.write(f"Nearest Address: {address}")
+            #st.write(f"Nearest Address: {address}")
         else:
             st.write("Address data could not be retrieved.")
         
@@ -145,14 +144,7 @@ with col2:
             pressure = weather_data['main']['pressure'] * 0.2953 # convert API data from hPA to inHg
             visibility = weather_data['visibility'] / 1609.34 # convert API data from meters to miles
             humidity = weather_data['main']['humidity']
-            wind_speed = weather_data['wind']['speed']
-            # Display weather information (not displayed in production app)
-            #st.write(f"Temperature: {temp} °F")
-            #st.write(f"Wind Chill: {wind_chill} °F")
-            #st.write(f"Pressure: {np.round(pressure, 2)} inHg")
-            #st.write(f"Visibility: {np.round(visibility, 2)} miles")
-            #st.write(f"Humidity: {humidity} %")
-            #st.write(f"Wind Speed: {wind_speed} mph")        
+            wind_speed = weather_data['wind']['speed']             
         else:
             st.write("Weather data could not be retrieved.")
 
@@ -244,23 +236,48 @@ with col2:
             if severity_prediction==1:
                 message = "Minor"
                 color = "green"
-                size = 32
+                size = 52
             elif severity_prediction==2:
                 message = "Moderate"
                 color = "yellow"
-                size = 34
+                size = 54
             elif severity_prediction==3:
                 message = "Major"
                 color = "orange"
-                size = 36
+                size = 56
             elif severity_prediction==4:
                 message = "SEVERE"
                 color = "red"
-                size = 38
-            st.header("Accident traffic impact severity:")
+                size = 58
+            st.divider()
+            st.header("Accident traffic impact:")
             st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{severity_prediction[0]} | {message}</h1>", unsafe_allow_html=True)
-            #st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)    
+            #st.markdown(f"<h1 style='color: {color}; font-size: {size}px;'>{message}</h1>", unsafe_allow_html=True)
+            st.divider()  
         except Exception as e2:
             st.write("Error running model:", e2)
     elif map_output['last_clicked'] is not None:
         st.write("Prediction cannot be generated. Please try again.")
+    
+    with st.expander("Accident Conditions"):
+        # Display the time
+        st.divider()
+        st.write(f"Accident Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        st.divider()
+        # Display the selected latitude and longitude
+        st.write(f"Accident Latitude: {lat}")
+        st.write(f"Accident Longitude: {lon}")
+        st.divider()
+        # Display the nearest address
+        st.write(f"Nearest Address: {address}")
+        st.divider()
+        # Display weather information (not displayed in production app)
+        st.write(f"Temperature: {temp} °F")
+        st.write(f"Wind Chill: {wind_chill} °F")
+        st.write(f"Pressure: {np.round(pressure, 2)} inHg")
+        st.write(f"Visibility: {np.round(visibility, 2)} miles")
+        st.write(f"Humidity: {humidity} %")
+        st.write(f"Wind Speed: {wind_speed} mph")
+        st.divider()
+        st.write(f"Traffic Signal within 1/4 mile: {traffic_signal}")
+        st.divider()
