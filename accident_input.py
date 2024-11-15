@@ -284,27 +284,26 @@ with col2:
         if local_time is not None:
             # Display the time
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-            st.write(f"Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            st.write(f"🕔 Time: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if lat is not None and lon is not None:
             # Display the selected latitude and longitude
-            st.write(f"Latitude: {lat}")
-            st.write(f"Longitude: {lon}")
+            st.write(f"🌐 Latitude: {lat}")
+            st.write(f"🌐 Longitude: {lon}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if address is not None:
             # Display the nearest address
-            st.write(f"Nearest Address: {address}")
+            st.write(f"🏪 Nearest Address: {address}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if temp is not None and wind_chill is not None and pressure is not None and visibility is not None and humidity is not None and wind_speed is not None:
             # Display weather information (not displayed in production app)
-            st.write(f"Temperature: {temp} °F")
-            st.write(f"Wind Chill: {wind_chill} °F")
-            st.write(f"Pressure: {np.round(pressure, 2)} inHg")
-            st.write(f"Visibility: {np.round(visibility, 2)} miles")
-            st.write(f"Humidity: {humidity} %")
-            st.write(f"Wind Speed: {wind_speed} mph")
+            st.write(f"🌡️ Temperature: {temp} °F")
+            st.write(f"🌥️ Pressure: {np.round(pressure, 2)} inHg")
+            st.write(f"🌫️ Visibility: {np.round(visibility, 2)} miles")
+            st.write(f"☀️ Humidity: {humidity} %")
+            st.write(f"☁️ Wind Speed: {wind_speed} mph")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
         if address is not None:
             # Display traffic signal presence
-            st.write(f"Traffic Signal within 1/4 mile: {traffic_signal}")
+            st.write(f"🚦 Traffic Signal within 1/4 mile: {traffic_signal}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
