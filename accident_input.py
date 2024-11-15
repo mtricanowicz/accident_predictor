@@ -44,10 +44,10 @@ st.header("Traffic Impact Predictor", divider="gray")
 
 # Specify the Google Drive file url to enable download and retrieval of the model .pkl file from Google Drive 
 # Model file IDs from Google Drive
-# Random Forest Model - https://drive.google.com/file/d/143EKAWRozG165zuVP54h5MJdW40Pw1ls/view?usp=drive_link
-# XGBoost Model - https://drive.google.com/file/d/1_0kDivpnBZRuoSnYWgiG1z1Xln7oFf1D/view?usp=drive_link
-# Blended RF+XGB Model - https://drive.google.com/file/d/1Q4b62ys0ooYfElCBZHn8M-u38ykzLkDL/view?usp=drive_link
-file_id = "1_0kDivpnBZRuoSnYWgiG1z1Xln7oFf1D"
+randomforest_id = st.secrets["Model_pkl_IDs"]["randomforest_id"] # Random Forest Model
+xgboost_id = st.secrets["Model_pkl_IDs"]["xgboost_id"] # XGBoost Model
+blended_id = st.secrets["Model_pkl_IDs"]["blended_id"] # Blended RF+XGB Model
+file_id = blended_id
 url = f"https://drive.google.com/uc?id={file_id}"
 
 # Define function to download and load model, caching the result
@@ -100,7 +100,7 @@ st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 ##### DEFINE FUNCTIONS #####
 
 # Define the openweathermaps.org API key to use
-API_KEY_owm = st.secrets["API_KEY_owm"] # my API key
+API_KEY_owm = st.secrets["API_Keys"]["API_KEY_owm"] # my API key
 
 # Define function to reverse geocode (get address from lat/lng)
 def reverse_geocode(lat, lon):
