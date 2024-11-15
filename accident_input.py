@@ -75,20 +75,24 @@ def severity_predictor(input):
 # Display explanation of the app
 with st.expander(label="About this app."):
     st.write("The purpose of this app is to use a pretrained machine learning model to predict how severe the traffic impact will be as a result of an accident.") 
-    st.write(f"The current version of this app uses a {model.__class__.__name__} model trained on the following features: {', '.join(model_features["Feature"].astype(str))}")
+    st.write(f"""The current version of this app uses a {model.__class__.__name__} model trained on the following features: {', '.join(model_features["Feature"].astype(str))}.
+        The model was developed around the ['US Accidents (2016-2023)'](https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents) dataset found on kaggle.
+        The dataset contains approximately 7.7 million accident records from the continental United States between the years 2016-2023 with 46 original features.
+        Undersampling, data cleaning, and feature selection was performed on the original dataset to prepare it for model development.
+    """)
     st.write("""This app provides a means for a user to input an accident location. The location and time of the input, as well as accompanying geographic and weather data, is fed into the model to generate a prediction. 
-             This app is designed to require as little user intervention as possible. A single click should be sufficient to obtain a prediction.\n
-             This is accomplished by processing the user input as follows:
-             1. The user click generates a latitude and longitude value.<br>
-             2. The lat/lon is processed by timzonefinder and pytz to determine the local time zone.
-             3. A timestamp is applied at time of click with the local timezone to generate local time of the event.
-             4. The lat/lon is processed by the Nominatim geocoder of geopy to generate the nearest address to the event location.
-             5. The lat/lon is processed by the OpenWeatherMap API to fetch the weather conditions for the location and time of the event.
-             6. The lat/lon is processed by the OpenStreetMap Overpass API to fetch whether a traffic signal is present within 400 m (approx 1/4 mile) of the event location.
-             7. The processed data is then compiled into a dataframe as the input variables for the model.
-             8. The input dataframe is fed to the model to generate a severity prediction.
-             9. The prediction and input variables are displayed by the app in a user friendly format. 
-             """)
+        This app is designed to require as little user intervention as possible. A single click should be sufficient to obtain a prediction.\n
+        This is accomplished by processing the user input as follows:
+        1. The user click generates a latitude and longitude value.
+        2. The lat/lon is processed by timzonefinder and pytz to determine the local time zone.
+        3. A timestamp is applied at time of click with the local timezone to generate local time of the event.
+        4. The lat/lon is processed by the Nominatim geocoder of geopy to generate the nearest address to the event location.
+        5. The lat/lon is processed by the OpenWeatherMap API to fetch the weather conditions for the location and time of the event.
+        6. The lat/lon is processed by the OpenStreetMap Overpass API to fetch whether a traffic signal is present within 400 m (approx 1/4 mile) of the event location.
+        7. The processed data is then compiled into a dataframe as the input variables for the model.
+        8. The input dataframe is fed to the model to generate a severity prediction.
+        9. The prediction and input variables are displayed by the app in a user friendly format. 
+    """)
     st.write("Identify accident location by selecting a point on the map.")
 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 
@@ -321,4 +325,3 @@ with col2: # output area
             # Display traffic signal presence
             st.write(f"🚦 Traffic Signal within 1/4 mile: {traffic_signal}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
-
