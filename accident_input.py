@@ -39,7 +39,6 @@ model_features = model_features[model_features["Feature"] != "Severity"]
 # Set page title
 st.header("Traffic Impact Predictor", divider="gray")
 
-
 ##### RETRIEVE AND LOAD MODEL #####
 
 # Specify the Google Drive file url to enable download and retrieval of the model .pkl file from Google Drive 
@@ -90,7 +89,7 @@ with st.expander(label="About this app."):
              \n5. The lat/lon is processed by the OpenWeatherMap API to fetch the weather conditions for the location and time of the event.
              \n6. The lat/lon is processed by the OpenStreetMap Overpass API to fetch whether a traffic signal is present within 400 m (approx 1/4 mile) of the event location.
              \n7. The processed data is then compiled into a dataframe as the input variables for the model.
-             \n8. The input dataframe is fed to the model to generate a severity prediction.
+             \n8. The input dataframe is fed to the model to generate a severity prediction between 1 (least severe) and 4 (most severe).
              \n9. The prediction and input variables are displayed by the app in a user friendly format. 
     """)
     st.write("Identify accident location by selecting a point on the map.")
@@ -164,7 +163,7 @@ with col1: # map and user interaction area
     # Add a click event to the map to capture user-selected point
     m.add_child(folium.LatLngPopup())
     # Display the map in Streamlit and capture the click event
-    map_output = st_folium(m, width=1200, height=800)
+    map_output = st_folium(m, width=1350, height=850)
 
     ##### PROCESS USER'S ACCIDENT INPUT #####
     # Check if the user clicked on the map and retrieve the coordinates
