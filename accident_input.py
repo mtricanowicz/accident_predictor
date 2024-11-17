@@ -88,9 +88,10 @@ with st.expander(label="About this app."):
              \n4. The lat/lon is processed by the Nominatim geocoder of geopy to generate the nearest address to the event location.
              \n5. The lat/lon is processed by the OpenWeatherMap API to fetch the weather conditions for the location and time of the event.
              \n6. The lat/lon is processed by the OpenStreetMap Overpass API to fetch whether a traffic signal is present within 400 m (approx 1/4 mile) of the event location.
-             \n7. The processed data is then compiled into a dataframe as the input variables for the model.
-             \n8. The input dataframe is fed to the model to generate a severity prediction between 1 (least severe) and 4 (most severe).
-             \n9. The prediction and input variables are displayed by the app in a user friendly format. 
+             \n7. The lat/lon is processed by the OpenStreetMap Overpass API to confirm whether it is a road to ensure it is a valid location to make a traffic impact prediction.
+             \n8. The processed data is then compiled into a dataframe as the input variables for the model.
+             \n9. The input dataframe is fed to the model to generate a severity prediction between 1 (least severe) and 4 (most severe).
+             \n10. The prediction and input variables are displayed by the app in a user friendly format. 
     """)
     st.write("Identify accident location by selecting a point on the map.")
 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
@@ -110,12 +111,8 @@ def reverse_geocode(lat, lon):
             return location.raw['address']
         else:
             return None
-    except requests.Timeout:
-        return "Error: The request timed out. Please try again."
-    except requests.ConnectionError:
-        return "Error: Network connection error. Please check your internet connection and try again."
-    except Exception as e: # Handle any other unforeseen errors
-        return f"Error: An unexpected error occurred. Please try again. ({e})"
+    except Exception as e: # Handle errors
+        return "Error: An unexpected error occurred. Please try again."
 
 # Define function to fetch weather data from OpenWeatherMap
 def get_weather_data(lat, lon, api_key):
@@ -229,24 +226,41 @@ with col1: # map and user interaction area
     #else:
     #    traffic_signal = True
 
-    # Determine traffic signal presence 
+    ##### USE OPENSTREETMAPS OVERPASS API TO MAKE CERTAIN CHECKS #####
     # Define OSM's Overpass API URL
     url_osm = "http://overpass-api.de/api/interpreter"
+    ## Determine traffic signal presence ##
     # Define Overpass query to retrieve traffic signals within 400 meters (about 1/4 mile) from the selected accident location
-    query = f"""
+    query_signal = f"""
     [out:json];
     node["highway"="traffic_signals"](around:400,{lat},{lon});
     out body;
     """
     # Send the request
-    response = requests.get(url_osm, params={'data': query})
+    response_signal = requests.get(url_osm, params={'data': query_signal})
     # Parse response JSON
-    traffic_presence = response.json()
+    traffic_presence = response_signal.json()
     # Define the traffic_signal variable. An empty set returned from the OSM query implies no traffic signals within the 1/4 mile radius
     if traffic_presence['elements']==[]:
         traffic_signal = False
     else:
         traffic_signal = True
+    ## Perform check to determine if the selected location is a road ##
+    # Define Overpass query to retrieve roads within 15 meters (about 50 feet) from the selected accident location
+    query_roads = f"""
+    [out:json];
+    way["highway"](around:10,{lat},{lon});
+    out ids;
+    """
+    # Send the request
+    response_roads = requests.get(url_osm, params={'data': query_roads})
+    # Parse response JSON
+    roads_presence = response_roads.json()
+    # Define the is_road variable. An empty set returned from the OSM query implies that the selected location is not within 50 feet of a road
+    if roads_presence['elements']==[]:
+        is_road = False
+    else:
+        is_road = True
 
     ##### Store accident conditions in a DataFrame #####
     if weather_data is not None and reverse_geocode(lat, lon) is not None:
@@ -264,8 +278,8 @@ with col2: # output area
         st.divider()
         st.header("Navigate to and click on accident location on map.")
         st.divider()
-    # Otherwise generate and display prediction
-    elif map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is not None:
+    # If user input is detected generate and display prediction
+    elif map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is not None and is_road==True:
         try:
             severity_prediction = severity_predictor(user_input)
             if severity_prediction==1:
@@ -291,17 +305,26 @@ with col2: # output area
             st.divider()  
         except Exception as e2:
             st.write("Error running model:", e2)
+    # Otherwise return prompts if the location does not meet necessary requirements for a prediction 
+    elif map_output['last_clicked'] is not None and is_road==False:
+        st.divider()
+        st.header("Selected location is not a road.")
+        st.header("Please try again.")
+        st.divider()
     elif map_output['last_clicked'] is not None and weather_data is None and reverse_geocode(lat, lon) is not None:
         st.divider()
-        st.write("Failed to retrieve weather data. Please try again.")
+        st.header("Failed to retrieve weather data.")
+        st.header("Please try again.")
         st.divider()
     elif map_output['last_clicked'] is not None and weather_data is not None and reverse_geocode(lat, lon) is None:
         st.divider()
-        st.write("Address not valid. Please try again.")
+        st.header("Address not valid.")
+        st.header("Please try again.")
         st.divider()
     elif map_output['last_clicked'] is not None:
         st.divider()
-        st.write("Prediction cannot be generated. Please try again.")
+        st.header("Prediction cannot be generated")
+        st.header("Please try again.")
         st.divider()
     
     # Display input variables in an expandable area for review
