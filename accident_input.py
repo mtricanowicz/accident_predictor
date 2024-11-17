@@ -367,5 +367,5 @@ with col2: # output area
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
 
     end_time = datetime.now()
-    st.write()
+    st.write("")
     st.write(f"Processing time: {(np.timedelta64((end_time-start_time), "s")/np.timedelta64(1, "s")):.0f} seconds")
