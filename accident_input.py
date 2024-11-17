@@ -163,6 +163,7 @@ with col1: # map and user interaction area
     map_output = st_folium(m, width=1350, height=850)
 
     ##### PROCESS USER'S ACCIDENT INPUT #####
+    start_time = datetime.now()
     # Check if the user clicked on the map and retrieve the coordinates
     if map_output['last_clicked'] is None:
         # Instantiate the location to the default starting location
@@ -364,3 +365,7 @@ with col2: # output area
             # Display traffic signal presence
             st.write(f"🚦 Traffic Signal within 1/4 mile: {traffic_signal}")
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+
+    end_time = datetime.now()
+    st.write()
+    st.write(f"Processing time: {(np.timedelta64((end_time-start_time), "s")/np.timedelta64(1, "s")):.0f} seconds")
