@@ -250,7 +250,7 @@ with col1: # map and user interaction area
     # Define Overpass query to retrieve roads within 15 meters (about 50 feet) from the selected accident location
     query_roads = f"""
     [out:json];
-    way["highway"](around:10,{lat},{lon});
+    way["highway"](around:15,{lat},{lon});
     out ids;
     """
     # Send the request
