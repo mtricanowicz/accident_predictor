@@ -266,7 +266,7 @@ with col1: # map and user interaction area
     ##### Store accident conditions in a DataFrame #####
     if weather_data is not None and reverse_geocode(lat, lon) is not None:
         columns = ["Start_Month", "Start_Day", "Start_Hour", "Start_Lat", "Start_Lng", "Temperature(F)", "Pressure(in)", "Visibility(mi)", "Humidity(%)", "Wind_Speed(mph)", "Traffic_Signal"]
-        inputs = [[local_time.month, local_time.weekday, local_time.hour, lat, lon, temp, pressure, visibility, humidity, wind_speed, traffic_signal]]
+        inputs = [[local_time.month, local_time.dayofweek, local_time.hour, lat, lon, temp, pressure, visibility, humidity, wind_speed, traffic_signal]]
         user_input = pd.DataFrame(inputs, columns=columns)   
         user_input = user_input[model_features["Feature"].values] # Reorder the input features to match what the model expects to see
         # Display model input DataFrame (not displayed in production app)
