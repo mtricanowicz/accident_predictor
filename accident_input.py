@@ -14,6 +14,9 @@ import timezonefinder
 import gdown
 import xgboost
 
+# Link to presentation document
+presentation = st.secrets["Documents"]["presentation"] # Random Forest Model
+
 # Set custom page configuration including the "About" section
 st.set_page_config(
     page_title="Traffic Impact Predictor",  # Custom title in the browser tab
@@ -21,9 +24,9 @@ st.set_page_config(
     layout="wide",  # Set the defaul layout for the app
     initial_sidebar_state="auto",  # Sidebar state when app loads
     menu_items={
-        "About": """
+        "About": f"""
         ## Traffic Impact Predictor App
-        This app was created to satisfy the project requirement of DSBA-6156 as part of the MS degree program in Data Science and Business Analytics at the University of North Carolina at Charlotte.\n
+        This app was created to satisfy the project requirement of DSBA-6156 ([accompanying presentation]({presentation})) as part of the MS degree program in Data Science and Business Analytics at the University of North Carolina at Charlotte.\n
         - **Version:** 1.0.0
         - **Author:** Michael Tricanowicz
         - **License:** MIT
