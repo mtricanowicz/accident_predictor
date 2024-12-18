@@ -26,10 +26,8 @@ st.set_page_config(
     menu_items={
         "About": f"""
         ## Traffic Impact Predictor App
-        This app was created to satisfy the project requirement of DSBA-6156 ([accompanying presentation]({presentation})) as part of the MS degree program in Data Science and Business Analytics at the University of North Carolina at Charlotte.\n
-        - **Version:** 1.0.0
+        This app was created to satisfy the project requirement of DSBA-6156 ([accompanying presentation]({presentation})) as part of the MS degree program in Data Science and Business Analytics at The University of North Carolina at Charlotte.\n
         - **Author:** Michael Tricanowicz
-        - **License:** MIT
         - **GitHub:** [accident_predictor](https://github.com/mtricanowicz/accident_predictor)
         """
     }
@@ -38,6 +36,9 @@ st.set_page_config(
 # Import the optimized model features                                   
 model_features = pd.read_csv("model_features.csv")
 model_features = model_features[model_features["Feature"] != "Severity"]
+
+# Load the prediction log
+prediction_log = pd.read_csv("prediction_log.csv")
 
 # Set page title
 st.header("Traffic Impact Predictor", divider="gray")
@@ -274,7 +275,7 @@ with col1: # map and user interaction area
         user_input = user_input[model_features["Feature"].values] # Reorder the input features to match what the model expects to see
         # Display model input DataFrame (not displayed in production app)
         #st.write("Features to load into model:")
-        #st.write(user_input) 
+        #st.write(user_input)
 
 with col2: # output area
     # Display prompt if no user input detected
@@ -341,7 +342,7 @@ with col2: # output area
         }
         </style>
     """, unsafe_allow_html=True)
-    with st.expander("Location Conditions"):
+    with st.expander("Location Conditions", expanded=True):
         if local_time is not None:
             # Display the time
             st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
@@ -372,3 +373,12 @@ with col2: # output area
     end_time = datetime.now()
     st.write("")
     st.write(f"Processing time: {(np.timedelta64((end_time-start_time), "s")/np.timedelta64(1, "s")):.0f} seconds")
+
+    # Log the prediction
+    with st.expander("Prediction Log"):
+        #prediction_log = pd.DataFrame(columns=["Traffic Impact Prediction", "Local Time", "Latitude", "Longitude", "Temperature (°F)", "Pressure (inHg)", "Visibility (mi)", "Humidity (%)", "Wind Speed (mph)", "Traffic Signal"]) # This line can be used to reset the log
+        if "severity_prediction" in locals() or 'severity_prediction' in globals():
+            prediction_latest = [severity_prediction[0], local_time, decimal_to_dms(lat), decimal_to_dms(lon), temp, np.round(pressure, 2), np.round(visibility, 2), humidity, wind_speed, traffic_signal]
+            prediction_log.loc[len(prediction_log)] = prediction_latest
+            prediction_log.to_csv("prediction_log.csv", index=False)
+        st.dataframe(prediction_log)

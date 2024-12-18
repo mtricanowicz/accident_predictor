@@ -1,0 +1,4 @@
+Traffic Impact Prediction,Local Time,Latitude,Longitude,Temperature (°F),Pressure (inHg),Visibility (mi),Humidity (%),Wind Speed (mph),Traffic Signal
+4,2024-12-18 13:42:02.760724-05:00,"40° 39' 12.24"" N","73° 53' 20.40"" S",52.95,300.91,6.21,54,11.5,True
+3,2024-12-18 13:42:44.007347-05:00,"41° 53' 43.73"" N","70° 44' 46.52"" S",49.55,301.5,6.21,61,11.5,False
+2,2024-12-18 13:43:45.373018-05:00,"35° 13' 37.32"" N","80° 49' 48.00"" S",68.4,300.62,6.21,77,9.22,True
