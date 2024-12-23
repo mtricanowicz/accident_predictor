@@ -39,7 +39,7 @@ model_features = pd.read_csv("model_features.csv")
 model_features = model_features[model_features["Feature"] != "Severity"]
 
 # Load the prediction log
-prediction_log = pd.read_csv("prediction_log.csv")
+prediction_log = pd.read_csv("prediction_log.csv") # Loads a persistent prediction log
 
 tab1, tab2 = st.tabs(["Traffic Impact Predictor", "Prediction Log"])
 
@@ -381,10 +381,13 @@ with tab1:
 # Log the prediction
 with tab2:
     st.header("Prediction Log", divider="gray")
-    #prediction_log = pd.DataFrame(columns=["Traffic Impact Prediction", "Local Time", "Latitude", "Longitude", "Temperature (°F)", "Pressure (inHg)", "Visibility (mi)", "Humidity (%)", "Wind Speed (mph)", "Traffic Signal"]) # This line can be used to reset the log
+    with st.expander(label="About this log."):
+        st.write("This tab records the log of predictions for the current session. It initializes with a few previous predictions shown as examples of what to expect.") 
+    st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
+    # prediction_log = pd.DataFrame(columns=["Traffic Impact Prediction", "Local Time", "Latitude", "Longitude", "Temperature (°F)", "Pressure (inHg)", "Visibility (mi)", "Humidity (%)", "Wind Speed (mph)", "Traffic Signal"]) # This line can be used to reset the log
     if "severity_prediction" in locals() or 'severity_prediction' in globals():
         prediction_latest = [severity_prediction[0], local_time, decimal_to_dms(lat), decimal_to_dms(lon), temp, np.round(pressure, 2), np.round(visibility, 2), humidity, wind_speed, traffic_signal]
         prediction_log.loc[len(prediction_log)] = prediction_latest
-        prediction_log.to_csv("prediction_log.csv", index=False, mode="a")
+        prediction_log.to_csv("prediction_log.csv", index=False)
     st.dataframe(prediction_log)
 
