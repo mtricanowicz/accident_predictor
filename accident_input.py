@@ -16,7 +16,11 @@ import gdown
 import xgboost
 
 # Link to presentation document
-presentation = st.secrets["Documents"]["presentation"] # Random Forest Model
+presentation = st.secrets["Documents"]["presentation"]
+# Links to Jupyter notebooks used to clean and prepare data and models
+data_preparation_notebook = st.secrets["Documents"]["data_preparation_notebook"]
+model_refinement_notebook = st.secrets["Documents"]["model_refinement_notebook"]
+final_model_notebook = st.secrets["Documents"]["final_model_notebook"]
 
 # Set custom page configuration including the "About" section
 st.set_page_config(
@@ -28,6 +32,9 @@ st.set_page_config(
         "About": f"""
         ## Traffic Impact Predictor App
         This app was created to satisfy the project requirement of DSBA-6156 ([accompanying presentation]({presentation})) as part of the MS degree program in Data Science and Business Analytics at The University of North Carolina at Charlotte.\n
+        EDA, data cleaning, data transformation and data preparation was performed as shown in [this data preparation notebook]({data_preparation_notebook}).\n
+        Model development and refinement was accomplished as shown in [this model building notebook]({model_refinement_notebook}).\n
+        Final model preparation for delivery to app was done in [this applet model notebook]({final_model_notebook}).\n
         - **Author:** Michael Tricanowicz
         - **GitHub:** [accident_predictor](https://github.com/mtricanowicz/accident_predictor)
         """
