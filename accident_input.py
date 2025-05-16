@@ -142,7 +142,7 @@ with tab1:
     tf = timezonefinder.TimezoneFinder()
 
     # Define function to convert latitude and longitude values from decimal to degrees/minutes/seconds format
-    def decimal_to_dms(decimal_coord):
+    def decimal_to_dms(decimal_coord, coord_type):
         # Determine if it's negative (for W or S)
         is_negative = decimal_coord < 0
         decimal_coord = abs(decimal_coord)
@@ -153,10 +153,10 @@ with tab1:
         seconds = (minutes_float - minutes) * 60
         # Return as a formatted string with N/S or E/W direction
         direction = ''
-        if is_negative:
-            direction = 'S' if degrees >= 0 else 'W'
+        if coord_type=="lat":
+            direction = 'S' if is_negative else 'N'
         else:
-            direction = 'N' if degrees >= 0 else 'E'
+            direction = 'W' if is_negative else 'E'
         return f"{degrees}° {minutes}' {seconds:.2f}\" {direction}"
 
     ##### DEFINE FUNCTIONS COMPLETE #####
@@ -361,8 +361,8 @@ with tab1:
                 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
             if lat is not None and lon is not None:
                 # Display the selected latitude and longitude
-                st.write(f"🌐 Latitude: {decimal_to_dms(lat)}")
-                st.write(f"🌐 Longitude: {decimal_to_dms(lon)}")
+                st.write(f"🌐 Latitude: {decimal_to_dms(lat, "lat")}")
+                st.write(f"🌐 Longitude: {decimal_to_dms(lon, "lon")}")
                 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
             if address is not None:
                 # Display the nearest address
