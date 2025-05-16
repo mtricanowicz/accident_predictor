@@ -393,7 +393,7 @@ with tab2:
     st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
     # prediction_log = pd.DataFrame(columns=["Traffic Impact Prediction", "Local Time", "Latitude", "Longitude", "Temperature (°F)", "Pressure (inHg)", "Visibility (mi)", "Humidity (%)", "Wind Speed (mph)", "Traffic Signal"]) # This line can be used to reset the log
     if "severity_prediction" in locals() or 'severity_prediction' in globals():
-        prediction_latest = [severity_prediction[0], local_time, decimal_to_dms(lat), decimal_to_dms(lon), temp, np.round(pressure, 2), np.round(visibility, 2), humidity, wind_speed, traffic_signal]
+        prediction_latest = [severity_prediction[0], local_time, decimal_to_dms(lat, "lat"), decimal_to_dms(lon, "lon"), temp, np.round(pressure, 2), np.round(visibility, 2), humidity, wind_speed, traffic_signal]
         prediction_log.loc[len(prediction_log)] = prediction_latest
         prediction_log.to_csv("prediction_log.csv", index=False)
     st.dataframe(prediction_log)
