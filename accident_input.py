@@ -248,7 +248,7 @@ with tab1:
         ## Determine traffic signal presence ##
         # Define Overpass query to retrieve traffic signals within 400 meters (about 1/4 mile) from the selected accident location
         query_signal = f"""
-        [out:json];
+        [out:json][timeout:60];
         node["highway"="traffic_signals"](around:400,{lat},{lon});
         out body;
         """
@@ -361,8 +361,8 @@ with tab1:
                 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
             if lat is not None and lon is not None:
                 # Display the selected latitude and longitude
-                st.write(f"🌐 Latitude: {decimal_to_dms(lat, "lat")}")
-                st.write(f"🌐 Longitude: {decimal_to_dms(lon, "lon")}")
+                st.write(f"🌐 Latitude: {decimal_to_dms(lat, 'lat')}")
+                st.write(f"🌐 Longitude: {decimal_to_dms(lon, 'lon')}")
                 st.markdown('<div class="custom-divider"></div>', unsafe_allow_html=True)
             if address is not None:
                 # Display the nearest address
@@ -383,7 +383,7 @@ with tab1:
 
         end_time = datetime.now()
         st.write("")
-        st.write(f"Processing time: {(np.timedelta64((end_time-start_time), "s")/np.timedelta64(1, "s")):.0f} seconds")
+        st.write(f"Processing time: {(np.timedelta64((end_time-start_time), 's')/np.timedelta64(1, 's')):.0f} seconds")
 
 # Log the prediction
 with tab2:
