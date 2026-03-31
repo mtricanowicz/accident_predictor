@@ -252,10 +252,36 @@ with tab1:
         node["highway"="traffic_signals"](around:400,{lat},{lon});
         out body;
         """
-        # Send the request
-        response_signal = requests.get(url_osm, params={'data': query_signal})
-        # Parse response JSON
-        traffic_presence = response_signal.json()
+        # Send the request with retry logic for 504 errors
+        import time
+        traffic_presence = {'elements': []}
+        signal_message = st.empty() # Placeholder for status messages related to the traffic signal API request
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response_signal = requests.post(url_osm, data=query_signal, timeout=30)
+                # Check if response is OK before parsing JSON
+                if response_signal.status_code == 200:
+                    traffic_presence = response_signal.json()
+                    signal_message.empty()
+                    break
+                elif response_signal.status_code == 504:
+                    if attempt < max_retries - 1:
+                        signal_message.info(f"Overpass API busy. Retrying check of signals... ({attempt+1}/{max_retries})")
+                        time.sleep(2 ** attempt)  # Exponential backoff
+                    else:
+                        signal_message.warning("Overpass API remained busy after all retries.")
+                else:
+                    signal_message.warning(f"Signal API status: {response_signal.status_code}")
+                    break
+            except requests.exceptions.Timeout:
+                if attempt < max_retries - 1:
+                    signal_message.info(f"Signal request timed out. Retrying check of signals... ({attempt+1}/{max_retries})")
+                    time.sleep(2 ** attempt)
+            except Exception as e:
+                signal_message.warning(f"Signal API error: {e}")
+                break
+        
         # Define the traffic_signal variable. An empty set returned from the OSM query implies no traffic signals within the 1/4 mile radius
         if traffic_presence['elements']==[]:
             traffic_signal = False
@@ -268,10 +294,34 @@ with tab1:
         way["highway"](around:15,{lat},{lon});
         out ids;
         """
-        # Send the request
-        response_roads = requests.get(url_osm, params={'data': query_roads})
-        # Parse response JSON
-        roads_presence = response_roads.json()
+        # Send the request with retry logic for 504 errors
+        roads_presence = {'elements': []}
+        road_message = st.empty() # Placeholder for status messages related to the roads API request
+        for attempt in range(max_retries):
+            try:
+                response_roads = requests.post(url_osm, data=query_roads, timeout=30)
+                # Check if response is OK before parsing JSON
+                if response_roads.status_code == 200:
+                    roads_presence = response_roads.json()
+                    road_message.empty()
+                    break
+                elif response_roads.status_code == 504:
+                    if attempt < max_retries - 1:
+                        road_message.info(f"Overpass API busy. Retrying check of roads... ({attempt+1}/{max_retries})")
+                        time.sleep(2 ** attempt)  # Exponential backoff
+                    else:
+                        road_message.warning("Overpass API remained busy after all retries.")
+                else:
+                    road_message.warning(f"Roads API status: {response_roads.status_code}")
+                    break
+            except requests.exceptions.Timeout:
+                if attempt < max_retries - 1:
+                    road_message.info(f"Roads request timed out. Retrying check of roads... ({attempt+1}/{max_retries})")
+                    time.sleep(2 ** attempt)
+            except Exception as e:
+                road_message.warning(f"Roads API error: {e}")
+                break
+        
         # Define the is_road variable. An empty set returned from the OSM query implies that the selected location is not within 50 feet of a road
         if roads_presence['elements']==[]:
             is_road = False
